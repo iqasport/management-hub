@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient({ log: ['query'] });
+const prisma = new PrismaClient({
+  ...(process.env.NODE_ENV !== 'production' && { log: ['query'] }),
+});
 export default prisma;
