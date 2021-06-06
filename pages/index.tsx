@@ -1,8 +1,11 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import axios from 'modules/axios';
+import { GetServerSideProps } from 'next';
+import { users as Users } from '@prisma/client';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 
-export default function Home() {
+const Example = ({ referee }: { referee: Users }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -13,7 +16,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a href="https://nextjs.org">Next.js</a>,{' '}
+          {referee.first_name}!
         </h1>
 
         <p className={styles.description}>
@@ -65,5 +69,16 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios('/api/v2/referees/257');
+  const { referee } = res.data;
+
+  return {
+    props: { referee },
+  };
+};
+
+export default Example;

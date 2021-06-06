@@ -1,0 +1,427 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model active_storage_attachments {
+  id                   BigInt               @id @default(autoincrement())
+  name                 String               @db.VarChar
+  record_type          String               @db.VarChar
+  record_id            BigInt
+  blob_id              BigInt
+  created_at           DateTime             @db.Timestamp(6)
+  active_storage_blobs active_storage_blobs @relation(fields: [blob_id], references: [id])
+
+  @@unique([record_type, record_id, name, blob_id], name: "index_active_storage_attachments_uniqueness")
+  @@index([blob_id], name: "index_active_storage_attachments_on_blob_id")
+}
+
+model active_storage_blobs {
+  id                         BigInt                       @id @default(autoincrement())
+  key                        String                       @unique @db.VarChar
+  filename                   String                       @db.VarChar
+  content_type               String?                      @db.VarChar
+  metadata                   String?
+  byte_size                  BigInt
+  checksum                   String                       @db.VarChar
+  created_at                 DateTime                     @db.Timestamp(6)
+  active_storage_attachments active_storage_attachments[]
+}
+
+model answers {
+  id          BigInt   @id @default(autoincrement())
+  question_id Int
+  description String
+  correct     Boolean  @default(false)
+  created_at  DateTime @db.Timestamp(6)
+  updated_at  DateTime @db.Timestamp(6)
+}
+
+model ar_internal_metadata {
+  key        String   @id @db.VarChar
+  value      String?  @db.VarChar
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+}
+
+model certification_payments {
+  id                BigInt   @id @default(autoincrement())
+  user_id           Int
+  certification_id  Int
+  stripe_session_id String   @db.VarChar
+  created_at        DateTime @db.Timestamp(6)
+  updated_at        DateTime @db.Timestamp(6)
+}
+
+model certifications {
+  id           BigInt   @id @default(autoincrement())
+  level        Int
+  display_name String   @default("") @db.VarChar
+  created_at   DateTime @db.Timestamp(6)
+  updated_at   DateTime @db.Timestamp(6)
+  version      Int?     @default(0)
+
+  @@unique([level, version], name: "index_certifications_on_level_and_version")
+}
+
+model data_migrations {
+  version String @id @db.VarChar
+}
+
+model exported_csvs {
+  id             BigInt    @id @default(autoincrement())
+  type           String?   @db.VarChar
+  user_id        Int
+  url            String?   @db.VarChar
+  processed_at   DateTime? @db.Timestamp(6)
+  sent_at        DateTime? @db.Timestamp(6)
+  export_options Json      @default("{}") @db.Json
+  created_at     DateTime  @db.Timestamp(6)
+  updated_at     DateTime  @db.Timestamp(6)
+
+  @@index([user_id], name: "index_exported_csvs_on_user_id")
+}
+
+model flipper_features {
+  id         BigInt   @id @default(autoincrement())
+  key        String   @unique @db.VarChar
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+}
+
+model flipper_gates {
+  id          BigInt   @id @default(autoincrement())
+  feature_key String   @db.VarChar
+  key         String   @db.VarChar
+  value       String?  @db.VarChar
+  created_at  DateTime @db.Timestamp(6)
+  updated_at  DateTime @db.Timestamp(6)
+
+  @@unique([feature_key, key, value], name: "index_flipper_gates_on_feature_key_and_key_and_value")
+}
+
+model languages {
+  id           BigInt   @id @default(autoincrement())
+  long_name    String   @default("english") @db.VarChar
+  short_name   String   @default("en") @db.VarChar
+  long_region  String?  @db.VarChar
+  short_region String?  @db.VarChar
+  created_at   DateTime @db.Timestamp(6)
+  updated_at   DateTime @db.Timestamp(6)
+}
+
+model national_governing_bodies {
+  id                             BigInt                           @id @default(autoincrement())
+  name                           String                           @db.VarChar
+  website                        String?                          @db.VarChar
+  created_at                     DateTime                         @db.Timestamp(6)
+  updated_at                     DateTime                         @db.Timestamp(6)
+  player_count                   Int                              @default(0)
+  image_url                      String?                          @db.VarChar
+  country                        String?                          @db.VarChar
+  acronym                        String?                          @db.VarChar
+  region                         Int?
+  membership_status              Int                              @default(0)
+  national_governing_body_admins national_governing_body_admins[]
+  national_governing_body_stats  national_governing_body_stats[]
+  teams                          teams[]
+
+  @@index([region], name: "index_national_governing_bodies_on_region")
+}
+
+model national_governing_body_admins {
+  id                         BigInt                    @id @default(autoincrement())
+  user_id                    BigInt                    @unique
+  national_governing_body_id BigInt
+  created_at                 DateTime                  @db.Timestamp(6)
+  updated_at                 DateTime                  @db.Timestamp(6)
+  national_governing_bodies  national_governing_bodies @relation(fields: [national_governing_body_id], references: [id])
+  users                      users                     @relation(fields: [user_id], references: [id])
+
+  @@index([national_governing_body_id], name: "index_national_governing_body_admins_on_ngb_id")
+}
+
+model national_governing_body_stats {
+  id                         BigInt                     @id @default(autoincrement())
+  national_governing_body_id BigInt?
+  total_referees_count       Int?                       @default(0)
+  head_referees_count        Int?                       @default(0)
+  assistant_referees_count   Int?                       @default(0)
+  snitch_referees_count      Int?                       @default(0)
+  competitive_teams_count    Int?                       @default(0)
+  developing_teams_count     Int?                       @default(0)
+  inactive_teams_count       Int?                       @default(0)
+  youth_teams_count          Int?                       @default(0)
+  university_teams_count     Int?                       @default(0)
+  community_teams_count      Int?                       @default(0)
+  team_status_change_count   Int?                       @default(0)
+  created_at                 DateTime                   @db.Timestamp(6)
+  updated_at                 DateTime                   @db.Timestamp(6)
+  total_teams_count          Int?                       @default(0)
+  uncertified_count          Int?                       @default(0)
+  start                      DateTime?                  @db.Timestamp(6)
+  end_time                   DateTime?                  @db.Timestamp(6)
+  scorekeeper_referees_count Int?                       @default(0)
+  national_governing_bodies  national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id])
+
+  @@index([national_governing_body_id], name: "ngb_stats_on_ngb_id")
+}
+
+model policy_manager_portability_requests {
+  id         BigInt    @id @default(autoincrement())
+  user_id    Int?
+  state      String?   @db.VarChar
+  expire_at  DateTime? @db.Timestamp(6)
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
+
+  @@index([user_id], name: "index_policy_manager_portability_requests_on_user_id")
+}
+
+model policy_manager_terms {
+  id          BigInt    @id @default(autoincrement())
+  description String?
+  rule        String?   @db.VarChar
+  state       String?   @db.VarChar
+  accepted_at DateTime? @db.Timestamp(6)
+  rejected_at DateTime? @db.Timestamp(6)
+  created_at  DateTime  @db.Timestamp(6)
+  updated_at  DateTime  @db.Timestamp(6)
+}
+
+model policy_manager_user_terms {
+  id         BigInt   @id @default(autoincrement())
+  user_id    Int?
+  term_id    Int?
+  state      String?  @db.VarChar
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+
+  @@index([state], name: "index_policy_manager_user_terms_on_state")
+  @@index([term_id], name: "index_policy_manager_user_terms_on_term_id")
+  @@index([user_id], name: "index_policy_manager_user_terms_on_user_id")
+}
+
+model questions {
+  id               BigInt   @id @default(autoincrement())
+  test_id          Int
+  description      String
+  points_available Int      @default(1)
+  feedback         String?
+  created_at       DateTime @db.Timestamp(6)
+  updated_at       DateTime @db.Timestamp(6)
+}
+
+model referee_answers {
+  id              BigInt   @id @default(autoincrement())
+  referee_id      BigInt
+  test_id         BigInt
+  question_id     BigInt
+  answer_id       BigInt
+  test_attempt_id BigInt
+  created_at      DateTime @db.Timestamp(6)
+  updated_at      DateTime @db.Timestamp(6)
+
+  @@index([answer_id], name: "index_referee_answers_on_answer_id")
+  @@index([question_id], name: "index_referee_answers_on_question_id")
+  @@index([referee_id], name: "index_referee_answers_on_referee_id")
+  @@index([test_attempt_id], name: "index_referee_answers_on_test_attempt_id")
+  @@index([test_id], name: "index_referee_answers_on_test_id")
+}
+
+model referee_certifications {
+  id               BigInt    @id @default(autoincrement())
+  referee_id       Int
+  certification_id Int
+  received_at      DateTime? @db.Timestamp(6)
+  revoked_at       DateTime? @db.Timestamp(6)
+  renewed_at       DateTime? @db.Timestamp(6)
+  created_at       DateTime  @db.Timestamp(6)
+  updated_at       DateTime  @db.Timestamp(6)
+  needs_renewal_at DateTime? @db.Timestamp(6)
+}
+
+model referee_locations {
+  id                         BigInt   @id @default(autoincrement())
+  referee_id                 Int
+  national_governing_body_id Int
+  created_at                 DateTime @db.Timestamp(6)
+  updated_at                 DateTime @db.Timestamp(6)
+  association_type           Int?     @default(0)
+
+  @@unique([referee_id, national_governing_body_id], name: "index_referee_locations_on_referee_id_and_ngb_id")
+}
+
+model referee_teams {
+  id               BigInt   @id @default(autoincrement())
+  team_id          BigInt?
+  referee_id       BigInt?
+  association_type Int?     @default(0)
+  created_at       DateTime @db.Timestamp(6)
+  updated_at       DateTime @db.Timestamp(6)
+  users            users?   @relation(fields: [referee_id], references: [id])
+  teams            teams?   @relation(fields: [team_id], references: [id])
+
+  @@unique([referee_id, association_type], name: "index_referee_teams_on_referee_id_and_association_type")
+  @@index([referee_id], name: "index_referee_teams_on_referee_id")
+  @@index([team_id], name: "index_referee_teams_on_team_id")
+}
+
+model roles {
+  id          BigInt   @id @default(autoincrement())
+  user_id     BigInt?
+  access_type Int      @default(0)
+  created_at  DateTime @db.Timestamp(6)
+  updated_at  DateTime @db.Timestamp(6)
+  users       users?   @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, access_type], name: "index_roles_on_user_id_and_access_type")
+  @@index([user_id], name: "index_roles_on_user_id")
+}
+
+model schema_migrations {
+  version String @id @db.VarChar
+}
+
+model social_accounts {
+  id           BigInt   @id @default(autoincrement())
+  ownable_type String?  @db.VarChar
+  ownable_id   BigInt?
+  url          String   @db.VarChar
+  account_type Int      @default(0)
+  created_at   DateTime @db.Timestamp(6)
+  updated_at   DateTime @db.Timestamp(6)
+
+  @@index([ownable_type, ownable_id], name: "index_social_accounts_on_ownable_type_and_ownable_id")
+}
+
+model team_status_changesets {
+  id              BigInt   @id @default(autoincrement())
+  team_id         BigInt?
+  previous_status String?  @db.VarChar
+  new_status      String?  @db.VarChar
+  created_at      DateTime @db.Timestamp(6)
+  updated_at      DateTime @db.Timestamp(6)
+  teams           teams?   @relation(fields: [team_id], references: [id])
+
+  @@index([team_id], name: "index_team_status_changesets_on_team_id")
+}
+
+model teams {
+  id                         BigInt                     @id @default(autoincrement())
+  name                       String                     @db.VarChar
+  city                       String                     @db.VarChar
+  state                      String?                    @db.VarChar
+  country                    String                     @db.VarChar
+  status                     Int?                       @default(0)
+  group_affiliation          Int?                       @default(0)
+  national_governing_body_id BigInt?
+  created_at                 DateTime                   @db.Timestamp(6)
+  updated_at                 DateTime                   @db.Timestamp(6)
+  joined_at                  DateTime?                  @default(now()) @db.Timestamp(6)
+  national_governing_bodies  national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id])
+  referee_teams              referee_teams[]
+  team_status_changesets     team_status_changesets[]
+
+  @@index([national_governing_body_id], name: "index_teams_on_national_governing_body_id")
+}
+
+model test_attempts {
+  id              BigInt    @id @default(autoincrement())
+  test_id         Int?
+  referee_id      Int?
+  test_level      Int?
+  next_attempt_at DateTime? @db.Timestamp(6)
+  created_at      DateTime  @db.Timestamp(6)
+  updated_at      DateTime  @db.Timestamp(6)
+}
+
+model test_results {
+  id                      BigInt    @id @default(autoincrement())
+  referee_id              Int
+  time_started            DateTime? @db.Time(6)
+  time_finished           DateTime? @db.Time(6)
+  duration                String?   @db.VarChar
+  percentage              Int?
+  points_scored           Int?
+  points_available        Int?
+  passed                  Boolean?
+  certificate_url         String?   @db.VarChar
+  minimum_pass_percentage Int?
+  created_at              DateTime  @db.Timestamp(6)
+  updated_at              DateTime  @db.Timestamp(6)
+  test_level              Int?      @default(0)
+  test_id                 Int?
+
+  @@index([referee_id], name: "index_test_results_on_referee_id")
+}
+
+model tests {
+  id                      BigInt   @id @default(autoincrement())
+  level                   Int?     @default(0)
+  name                    String?  @db.VarChar
+  certification_id        Int?
+  created_at              DateTime @db.Timestamp(6)
+  updated_at              DateTime @db.Timestamp(6)
+  description             String
+  time_limit              Int      @default(18)
+  minimum_pass_percentage Int      @default(80)
+  positive_feedback       String?
+  negative_feedback       String?
+  language                String?  @db.VarChar
+  active                  Boolean  @default(false)
+  testable_question_count Int      @default(0)
+  recertification         Boolean? @default(false)
+  new_language_id         Int?
+}
+
+model users {
+  id                             BigInt                          @id @default(autoincrement())
+  email                          String                          @unique @default("") @db.VarChar
+  encrypted_password             String                          @default("") @db.VarChar
+  reset_password_token           String?                         @unique @db.VarChar
+  reset_password_sent_at         DateTime?                       @db.Timestamp(6)
+  remember_created_at            DateTime?                       @db.Timestamp(6)
+  sign_in_count                  Int                             @default(0)
+  current_sign_in_at             DateTime?                       @db.Timestamp(6)
+  last_sign_in_at                DateTime?                       @db.Timestamp(6)
+  current_sign_in_ip             String?                         @db.Inet
+  last_sign_in_ip                String?                         @db.Inet
+  first_name                     String?                         @db.VarChar
+  last_name                      String?                         @db.VarChar
+  bio                            String?
+  pronouns                       String?                         @db.VarChar
+  show_pronouns                  Boolean?                        @default(false)
+  created_at                     DateTime                        @db.Timestamp(6)
+  updated_at                     DateTime                        @db.Timestamp(6)
+  submitted_payment_at           DateTime?                       @db.Timestamp(6)
+  admin                          Boolean?                        @default(false)
+  confirmation_token             String?                         @unique @db.VarChar
+  confirmed_at                   DateTime?                       @db.Timestamp(6)
+  confirmation_sent_at           DateTime?                       @db.Timestamp(6)
+  failed_attempts                Int                             @default(0)
+  unlock_token                   String?                         @unique @db.VarChar
+  locked_at                      DateTime?                       @db.Timestamp(6)
+  invitation_token               String?                         @unique @db.VarChar
+  invitation_created_at          DateTime?                       @db.Timestamp(6)
+  invitation_sent_at             DateTime?                       @db.Timestamp(6)
+  invitation_accepted_at         DateTime?                       @db.Timestamp(6)
+  invitation_limit               Int?
+  invited_by_type                String?                         @db.VarChar
+  invited_by_id                  BigInt?
+  invitations_count              Int?                            @default(0)
+  export_name                    Boolean?                        @default(true)
+  stripe_customer_id             String?                         @db.VarChar
+  language_id                    Int?
+  national_governing_body_admins national_governing_body_admins?
+  referee_teams                  referee_teams[]
+  roles                          roles[]
+
+  @@index([invitations_count], name: "index_users_on_invitations_count")
+  @@index([invited_by_id], name: "index_users_on_invited_by_id")
+  @@index([invited_by_type, invited_by_id], name: "index_users_on_invited_by_type_and_invited_by_id")
+}
