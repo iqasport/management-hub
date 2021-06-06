@@ -7,7 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "migrate:init": "npx prisma migrate dev --name init",
+    "db:seed": "prisma db seed --preview-feature",
+    "ts-node": "ts-node --compiler-options '{\"module\":\"commonjs\"}'",
+    "db:setup": "yarn docker:up && sleep 5 && yarn migrate:init && yarn db:seed"
   },
   "dependencies": {
     "@prisma/client": "^2.24.1",
@@ -17,6 +23,7 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@types/node": "^15.12.1",
     "@types/react": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
@@ -28,6 +35,7 @@
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.1",
     "prisma": "^2.24.1",
+    "ts-node": "^10.0.0",
     "typescript": "^4.3.2"
   },
   "lint-staged": {
