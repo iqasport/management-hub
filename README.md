@@ -18,15 +18,20 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 ## QuickStart Local Development
 
+For local development a database is required, so the following spins up a Postgres Docker Container which runs in the background and seeds it with dummy data.
+
+You will need a `.env` file to set environment variables - use `.env.example` as a template.
+
 1. Start [Docker Desktop](https://www.docker.com/get-started)
 2. Run `yarn db:setup` which will start the docker container with Postgres, run migrations and seed the database
 3. `yarn install`
 4. `yarn dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-You will need a `.env.local` file to set environment variables - use `.env.example` as a base to build off.
 
 To tear down the database run `yarn docker:down`
+
+---
 
 ## Key Technology and Documentation
 
