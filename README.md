@@ -18,18 +18,24 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 ## QuickStart Local Development
 
-For local development a database is required, so the following spins up a Postgres Docker Container which runs in the background and seeds it with dummy data.
+The following guide spins up a local environment for development, with an up-to-date Postgres database seeded with dummy data running in the background. Each step must be completed before moving on to the next one.
 
-You will need a `.env` file to set environment variables - use `.env.example` as a template.
+### Prequisites
 
-1. Start [Docker Desktop](https://www.docker.com/get-started)
-2. Run`yarn install`
-3. Run `yarn db:setup` which will start the docker container with Postgres, run migrations and seed the database
-4. `yarn dev`
+This project assumes you already have a Node evironment setup and have yarn installed. We strongly recommend using a Node Version Manager like [nvm](https://github.com/nvm-sh/nvm). You will also need to have [Docker Desktop](https://www.docker.com/get-started)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You will need a `.env` file to set environment variables - duplicate `.env.example` and rename the copy to `.env` to get started.
 
-To tear down the database run `yarn docker:down`
+### Steps
+
+1. Start Docker Desktop - this can take a few minutes
+2. In your terminal go in to the management-hub folder (where this file is) and run `yarn install`
+3. In the same folder run `yarn db:setup` which will start the docker container with Postgres, run migrations and seed the database
+4. Finally run `yarn dev` in the same folder
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+To tear down the database run `yarn docker:down`. To reinitialise simply run steps 3 & 4 again.
 
 ---
 

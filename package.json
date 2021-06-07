@@ -3,17 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "________________local_dev________________": "",
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "prepare": "husky install",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "migrate:init": "prisma migrate dev --name init",
     "db:seed": "prisma db seed --preview-feature",
     "ts-node": "ts-node --compiler-options '{\"module\":\"commonjs\"}'",
-    "db:setup": "yarn docker:up && sleep 5 && yarn migrate:init && yarn db:seed"
+    "db:setup": "yarn docker:up && sleep 5 && yarn migrate:init && yarn db:seed",
+    "________________testing________________": "",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "prepare": "husky install",
+    "________________deploy________________": "",
+    "build": "next build"
   },
   "dependencies": {
     "@prisma/client": "^2.24.1",
