@@ -23,8 +23,8 @@ For local development a database is required, so the following spins up a Postgr
 You will need a `.env` file to set environment variables - use `.env.example` as a template.
 
 1. Start [Docker Desktop](https://www.docker.com/get-started)
-2. Run `yarn db:setup` which will start the docker container with Postgres, run migrations and seed the database
-3. `yarn install`
+2. Run`yarn install`
+3. Run `yarn db:setup` which will start the docker container with Postgres, run migrations and seed the database
 4. `yarn dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

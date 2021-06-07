@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "prepare": "husky install",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "migrate:init": "npx prisma migrate dev --name init",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "migrate:init": "prisma migrate dev --name init",
     "db:seed": "prisma db seed --preview-feature",
     "ts-node": "ts-node --compiler-options '{\"module\":\"commonjs\"}'",
     "db:setup": "yarn docker:up && sleep 5 && yarn migrate:init && yarn db:seed"
