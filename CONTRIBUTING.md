@@ -17,4 +17,4 @@ yarn run dev
 
 ## Committing
 
-Chaser uses ESLint and Husky to enforce this linting style.
+`🤾‍♀️🏐 IQA Management Hub` uses ESLint and Husky to enforce this linting style.
