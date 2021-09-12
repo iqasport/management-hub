@@ -8,7 +8,7 @@ datasource db {
 }
 
 model active_storage_attachments {
-  uuid                 String               @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                 String               @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                   BigInt               @id @default(autoincrement())
   name                 String               @db.VarChar
   record_type          String               @db.VarChar
@@ -22,7 +22,7 @@ model active_storage_attachments {
 }
 
 model active_storage_blobs {
-  uuid                       String                       @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                       String                       @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                       @id @default(autoincrement())
   key                        String                       @unique @db.VarChar
   filename                   String                       @db.VarChar
@@ -35,7 +35,7 @@ model active_storage_blobs {
 }
 
 model answers {
-  uuid        String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid        String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id          BigInt   @id @default(autoincrement())
   question_id Int
   description String
@@ -52,7 +52,7 @@ model ar_internal_metadata {
 }
 
 model certification_payments {
-  uuid              String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid              String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                BigInt   @id @default(autoincrement())
   user_id           Int
   certification_id  Int
@@ -62,7 +62,7 @@ model certification_payments {
 }
 
 model certifications {
-  uuid         String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id           BigInt   @id @default(autoincrement())
   level        Int
   display_name String   @default("") @db.VarChar
@@ -78,7 +78,7 @@ model data_migrations {
 }
 
 model exported_csvs {
-  uuid           String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid           String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id             BigInt    @id @default(autoincrement())
   type           String?   @db.VarChar
   user_id        Int
@@ -93,7 +93,7 @@ model exported_csvs {
 }
 
 model flipper_features {
-  uuid       String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt   @id @default(autoincrement())
   key        String   @unique @db.VarChar
   created_at DateTime @db.Timestamp(6)
@@ -101,7 +101,7 @@ model flipper_features {
 }
 
 model flipper_gates {
-  uuid        String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid        String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id          BigInt   @id @default(autoincrement())
   feature_key String   @db.VarChar
   key         String   @db.VarChar
@@ -113,7 +113,7 @@ model flipper_gates {
 }
 
 model languages {
-  uuid         String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id           BigInt   @id @default(autoincrement())
   long_name    String   @default("english") @db.VarChar
   short_name   String   @default("en") @db.VarChar
@@ -124,7 +124,7 @@ model languages {
 }
 
 model national_governing_bodies {
-  uuid                           String                           @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                           String                           @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                             BigInt                           @id @default(autoincrement())
   name                           String                           @db.VarChar
   website                        String?                          @db.VarChar
@@ -144,7 +144,7 @@ model national_governing_bodies {
 }
 
 model national_governing_body_admins {
-  uuid                       String                    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                       String                    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                    @id @default(autoincrement())
   user_id                    BigInt                    @unique
   national_governing_body_id BigInt
@@ -157,7 +157,7 @@ model national_governing_body_admins {
 }
 
 model national_governing_body_stats {
-  uuid                       String                     @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                       String                     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                     @id @default(autoincrement())
   national_governing_body_id BigInt?
   total_referees_count       Int?                       @default(0)
@@ -184,7 +184,7 @@ model national_governing_body_stats {
 }
 
 model policy_manager_portability_requests {
-  uuid       String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid       String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt    @id @default(autoincrement())
   user_id    Int?
   state      String?   @db.VarChar
@@ -196,7 +196,7 @@ model policy_manager_portability_requests {
 }
 
 model policy_manager_terms {
-  uuid        String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid        String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id          BigInt    @id @default(autoincrement())
   description String?
   rule        String?   @db.VarChar
@@ -208,7 +208,7 @@ model policy_manager_terms {
 }
 
 model policy_manager_user_terms {
-  uuid       String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt   @id @default(autoincrement())
   user_id    Int?
   term_id    Int?
@@ -222,7 +222,7 @@ model policy_manager_user_terms {
 }
 
 model questions {
-  uuid             String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid             String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id               BigInt   @id @default(autoincrement())
   test_id          Int
   description      String
@@ -233,7 +233,7 @@ model questions {
 }
 
 model referee_answers {
-  uuid            String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid            String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt   @id @default(autoincrement())
   referee_id      BigInt
   test_id         BigInt
@@ -251,7 +251,7 @@ model referee_answers {
 }
 
 model referee_certifications {
-  uuid             String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid             String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id               BigInt    @id @default(autoincrement())
   referee_id       Int
   certification_id Int
@@ -264,7 +264,7 @@ model referee_certifications {
 }
 
 model referee_locations {
-  uuid                       String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt   @id @default(autoincrement())
   referee_id                 Int
   national_governing_body_id Int
@@ -276,7 +276,7 @@ model referee_locations {
 }
 
 model referee_teams {
-  uuid             String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid             String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id               BigInt   @id @default(autoincrement())
   team_id          BigInt?
   referee_id       BigInt?
@@ -292,7 +292,7 @@ model referee_teams {
 }
 
 model roles {
-  uuid        String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid        String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id          BigInt   @id @default(autoincrement())
   user_id     BigInt?
   access_type Int      @default(0)
@@ -309,7 +309,7 @@ model schema_migrations {
 }
 
 model social_accounts {
-  uuid         String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id           BigInt   @id @default(autoincrement())
   ownable_type String?  @db.VarChar
   ownable_id   BigInt?
@@ -334,7 +334,7 @@ model team_status_changesets {
 }
 
 model teams {
-  uuid                       String                     @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                       String                     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                     @id @default(autoincrement())
   name                       String                     @db.VarChar
   city                       String                     @db.VarChar
@@ -354,7 +354,7 @@ model teams {
 }
 
 model test_attempts {
-  uuid            String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid            String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt    @id @default(autoincrement())
   test_id         Int?
   referee_id      Int?
@@ -365,7 +365,7 @@ model test_attempts {
 }
 
 model test_results {
-  uuid                    String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                    String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                      BigInt    @id @default(autoincrement())
   referee_id              Int
   time_started            DateTime? @db.Time(6)
@@ -386,7 +386,7 @@ model test_results {
 }
 
 model tests {
-  uuid                    String   @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                    String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                      BigInt   @id @default(autoincrement())
   level                   Int?     @default(0)
   name                    String?  @db.VarChar
@@ -406,7 +406,7 @@ model tests {
 }
 
 model users {
-  uuid                           String                          @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  uuid                           String                          @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                             BigInt                          @id @default(autoincrement())
   email                          String                          @unique @default("") @db.VarChar
   encrypted_password             String                          @default("") @db.VarChar
