@@ -1,16 +1,76 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.users.create({
+  await prisma.policy_manager_terms.create({
     data: {
-      first_name: 'Declan',
-      last_name: 'Ramsay',
-      id: 257,
+      description: '# Privacy Policy',
+      rule: 'privacy_terms',
+      state: 'published',
       created_at: new Date(),
       updated_at: new Date(),
     },
   });
+
+  const encrypted_password = await bcrypt.hash('password', 10);
+
+  await prisma.users.create({
+    data: {
+      first_name: 'referee',
+      email: 'referee@example.com',
+      encrypted_password,
+      created_at: new Date(),
+      updated_at: new Date(),
+      confirmed_at: new Date(),
+      roles: {
+        create: {
+          access_type: 0,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      },
+    },
+  });
+
+  await prisma.users.create({
+    data: {
+      first_name: 'iqa_admin',
+      email: 'iqa_admin@example.com',
+      admin: true,
+      encrypted_password,
+      created_at: new Date(),
+      updated_at: new Date(),
+      confirmed_at: new Date(),
+      roles: {
+        create: {
+          access_type: 2,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      },
+    },
+  });
+
+  await prisma.users.create({
+    data: {
+      first_name: 'ngb_admin',
+      email: 'ngb_admin@example.com',
+      encrypted_password,
+      created_at: new Date(),
+      updated_at: new Date(),
+      confirmed_at: new Date(),
+      roles: {
+        create: {
+          access_type: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      },
+    },
+  });
+
   await prisma.national_governing_bodies.createMany({
     data: [
       {
