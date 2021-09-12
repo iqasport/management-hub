@@ -156,6 +156,7 @@ model national_governing_body_admins {
   uuid                       String                    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                    @id @default(autoincrement())
   user_id                    BigInt                    @unique
+  user_uuid                  String?                   @db.Uuid
   national_governing_body_id BigInt
   created_at                 DateTime                  @db.Timestamp(6)
   updated_at                 DateTime                  @db.Timestamp(6)
@@ -196,6 +197,7 @@ model policy_manager_portability_requests {
   uuid       String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt    @id @default(autoincrement())
   user_id    Int?
+  user_uuid  String?   @db.Uuid
   state      String?   @db.VarChar
   expire_at  DateTime? @db.Timestamp(6)
   created_at DateTime  @db.Timestamp(6)
@@ -301,6 +303,7 @@ model referee_locations {
   uuid                       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt   @id @default(autoincrement())
   referee_id                 Int
+  user_uuid                  String?  @db.Uuid
   national_governing_body_id Int
   created_at                 DateTime @db.Timestamp(6)
   updated_at                 DateTime @db.Timestamp(6)
@@ -314,6 +317,7 @@ model referee_teams {
   id               BigInt   @id @default(autoincrement())
   team_id          BigInt?
   referee_id       BigInt?
+  user_uuid        String?  @db.Uuid
   association_type Int?     @default(0)
   created_at       DateTime @db.Timestamp(6)
   updated_at       DateTime @db.Timestamp(6)
@@ -329,6 +333,7 @@ model roles {
   uuid        String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id          BigInt   @id @default(autoincrement())
   user_id     BigInt?
+  user_uuid   String?  @db.Uuid
   access_type Int      @default(0)
   created_at  DateTime @db.Timestamp(6)
   updated_at  DateTime @db.Timestamp(6)
@@ -394,6 +399,7 @@ model test_attempts {
   id              BigInt    @id @default(autoincrement())
   test_id         Int?
   referee_id      Int?
+  user_uuid       String?   @db.Uuid
   test_level      Int?
   next_attempt_at DateTime? @db.Timestamp(6)
   created_at      DateTime  @db.Timestamp(6)

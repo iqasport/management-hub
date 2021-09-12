@@ -315,6 +315,27 @@ async function main() {
       },
     ],
   });
+
+  await prisma.tests.create({
+    data: {
+      id: 1,
+      name: 'Snitch Referee Written Test 2018–20',
+      created_at: new Date(),
+      updated_at: new Date(),
+      description:
+        "You will have 20 minutes to complete this exam once started. You will not be able to save your progress if you exit this window. After you submit your answers your results will be emailed to you, and you'll be able to see the results on your referee profile. If you did not pass on this attempt you will have to wait 24 hours until your next attempt. You can not take this exam more than 6 times. If you have any questions before taking the exam please reach out to referees@iqasport.org",
+      time_limit: 20,
+      positive_feedback:
+        'Congratulations!  You have passed the Snitch Referee exam! This means you are now a fully certified IQA Snitch Referee! Please ensure that you continue to develop your referee skills over time using the resources provided on the IQA Referees website!',
+      negative_feedback:
+        'Unfortunately, you have not passed the Snitch Referee exam. At this time, you will have to wait 24 hours before attempting this exam again. Study up!',
+      language: 'English',
+      active: true,
+      testable_question_count: 20,
+      new_language_id: 1,
+      level: 0,
+    },
+  });
 }
 
 main()
