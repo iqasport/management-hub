@@ -57,13 +57,13 @@ model certification_payments {
   uuid               String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                 BigInt   @id @default(autoincrement())
   user_id            Int
-  user_uuid          String?  @db.Uuid
+  user_uuid          String   @db.Uuid
   certification_id   Int
   certification_uuid String?  @db.Uuid
   stripe_session_id  String   @db.VarChar
   created_at         DateTime @db.Timestamp(6)
   updated_at         DateTime @db.Timestamp(6)
-  // users              users?          @relation(fields: [user_uuid], references: [uuid])
+  users              users?   @relation(fields: [user_uuid], references: [uuid])
   // certifications     certifications? @relation(fields: [certification_uuid], references: [uuid])
 }
 
@@ -89,16 +89,14 @@ model exported_csvs {
   id             BigInt    @id @default(autoincrement())
   type           String?   @db.VarChar
   user_id        Int
-  user_uuid      String?   @db.Uuid
+  user_uuid      String    @db.Uuid
   url            String?   @db.VarChar
   processed_at   DateTime? @db.Timestamp(6)
   sent_at        DateTime? @db.Timestamp(6)
   export_options Json      @default("{}") @db.Json
   created_at     DateTime  @db.Timestamp(6)
   updated_at     DateTime  @db.Timestamp(6)
-  // users          users?    @relation(fields: [user_uuid], references: [uuid])
-
-  @@index([user_id], name: "index_exported_csvs_on_user_id")
+  users          users?    @relation(fields: [user_uuid], references: [uuid])
 }
 
 model flipper_features {
@@ -156,12 +154,12 @@ model national_governing_body_admins {
   uuid                       String                    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                    @id @default(autoincrement())
   user_id                    BigInt                    @unique
-  user_uuid                  String?                   @db.Uuid
+  user_uuid                  String                    @db.Uuid
   national_governing_body_id BigInt
   created_at                 DateTime                  @db.Timestamp(6)
   updated_at                 DateTime                  @db.Timestamp(6)
   national_governing_bodies  national_governing_bodies @relation(fields: [national_governing_body_id], references: [id])
-  users                      users                     @relation(fields: [user_id], references: [id])
+  users                      users                     @relation(fields: [user_uuid], references: [uuid])
 
   @@index([national_governing_body_id], name: "index_national_governing_body_admins_on_ngb_id")
 }
@@ -197,13 +195,11 @@ model policy_manager_portability_requests {
   uuid       String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt    @id @default(autoincrement())
   user_id    Int?
-  user_uuid  String?   @db.Uuid
+  user_uuid  String    @db.Uuid
   state      String?   @db.VarChar
   expire_at  DateTime? @db.Timestamp(6)
   created_at DateTime  @db.Timestamp(6)
   updated_at DateTime  @db.Timestamp(6)
-
-  @@index([user_id], name: "index_policy_manager_portability_requests_on_user_id")
 }
 
 model policy_manager_terms {
@@ -224,19 +220,17 @@ model policy_manager_user_terms {
   uuid       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt   @id @default(autoincrement())
   user_id    Int?
-  user_uuid  String?  @db.Uuid
+  user_uuid  String   @db.Uuid
   term_uuid  String?  @db.Uuid
   term_id    Int?
   state      String?  @db.VarChar
   created_at DateTime @db.Timestamp(6)
   updated_at DateTime @db.Timestamp(6)
 
-  // users                users?                @relation(fields: [user_uuid], references: [uuid])
+  users users? @relation(fields: [user_uuid], references: [uuid])
   // policy_manager_terms policy_manager_terms? @relation(fields: [term_uuid], references: [uuid])
-
   @@index([state], name: "index_policy_manager_user_terms_on_state")
   @@index([term_id], name: "index_policy_manager_user_terms_on_term_id")
-  @@index([user_id], name: "index_policy_manager_user_terms_on_user_id")
 }
 
 model questions {
@@ -258,7 +252,7 @@ model referee_answers {
   uuid            String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt   @id @default(autoincrement())
   referee_id      BigInt
-  user_uuid       String?  @db.Uuid
+  user_uuid       String   @db.Uuid
   test_id         BigInt
   test_uuid       String?  @db.Uuid
   question_id     BigInt
@@ -269,7 +263,7 @@ model referee_answers {
   created_at      DateTime @db.Timestamp(6)
   updated_at      DateTime @db.Timestamp(6)
 
-  // users     users?     @relation(fields: [user_uuid], references: [uuid])
+  users users? @relation(fields: [user_uuid], references: [uuid])
   // tests     tests?     @relation(fields: [test_uuid], references: [uuid])
   // questions questions? @relation(fields: [question_uuid], references: [uuid])
   // answers   answers?   @relation(fields: [answer_uuid], references: [uuid])
@@ -278,7 +272,6 @@ model referee_answers {
 
   @@index([answer_id], name: "index_referee_answers_on_answer_id")
   @@index([question_id], name: "index_referee_answers_on_question_id")
-  @@index([referee_id], name: "index_referee_answers_on_referee_id")
   @@index([test_attempt_id], name: "index_referee_answers_on_test_attempt_id")
   @@index([test_id], name: "index_referee_answers_on_test_id")
 }
@@ -287,7 +280,7 @@ model referee_certifications {
   uuid             String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id               BigInt    @id @default(autoincrement())
   referee_id       Int
-  user_uuid        String?   @db.Uuid
+  user_uuid        String    @db.Uuid
   certification_id Int
   received_at      DateTime? @db.Timestamp(6)
   revoked_at       DateTime? @db.Timestamp(6)
@@ -296,20 +289,18 @@ model referee_certifications {
   updated_at       DateTime  @db.Timestamp(6)
   needs_renewal_at DateTime? @db.Timestamp(6)
 
-  // users users? @relation(fields: [user_uuid], references: [uuid])
+  users users? @relation(fields: [user_uuid], references: [uuid])
 }
 
 model referee_locations {
   uuid                       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt   @id @default(autoincrement())
   referee_id                 Int
-  user_uuid                  String?  @db.Uuid
+  user_uuid                  String   @db.Uuid
   national_governing_body_id Int
   created_at                 DateTime @db.Timestamp(6)
   updated_at                 DateTime @db.Timestamp(6)
   association_type           Int?     @default(0)
-
-  @@unique([referee_id, national_governing_body_id], name: "index_referee_locations_on_referee_id_and_ngb_id")
 }
 
 model referee_teams {
@@ -317,15 +308,13 @@ model referee_teams {
   id               BigInt   @id @default(autoincrement())
   team_id          BigInt?
   referee_id       BigInt?
-  user_uuid        String?  @db.Uuid
+  user_uuid        String   @db.Uuid
   association_type Int?     @default(0)
   created_at       DateTime @db.Timestamp(6)
   updated_at       DateTime @db.Timestamp(6)
-  users            users?   @relation(fields: [referee_id], references: [id])
+  users            users?   @relation(fields: [user_uuid], references: [uuid])
   teams            teams?   @relation(fields: [team_id], references: [id])
 
-  @@unique([referee_id, association_type], name: "index_referee_teams_on_referee_id_and_association_type")
-  @@index([referee_id], name: "index_referee_teams_on_referee_id")
   @@index([team_id], name: "index_referee_teams_on_team_id")
 }
 
@@ -333,14 +322,11 @@ model roles {
   uuid        String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id          BigInt   @id @default(autoincrement())
   user_id     BigInt?
-  user_uuid   String?  @db.Uuid
+  user_uuid   String   @db.Uuid
   access_type Int      @default(0)
   created_at  DateTime @db.Timestamp(6)
   updated_at  DateTime @db.Timestamp(6)
-  users       users?   @relation(fields: [user_id], references: [id])
-
-  @@unique([user_id, access_type], name: "index_roles_on_user_id_and_access_type")
-  @@index([user_id], name: "index_roles_on_user_id")
+  users       users?   @relation(fields: [user_uuid], references: [uuid])
 }
 
 model schema_migrations {
@@ -399,18 +385,20 @@ model test_attempts {
   id              BigInt    @id @default(autoincrement())
   test_id         Int?
   referee_id      Int?
-  user_uuid       String?   @db.Uuid
+  user_uuid       String    @db.Uuid
   test_level      Int?
   next_attempt_at DateTime? @db.Timestamp(6)
   created_at      DateTime  @db.Timestamp(6)
   updated_at      DateTime  @db.Timestamp(6)
+
+  users users? @relation(fields: [user_uuid], references: [uuid])
 }
 
 model test_results {
   uuid                    String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                      BigInt    @id @default(autoincrement())
   referee_id              Int
-  user_uuid               String?   @db.Uuid
+  user_uuid               String    @db.Uuid
   time_started            DateTime? @db.Time(6)
   time_finished           DateTime? @db.Time(6)
   duration                String?   @db.VarChar
@@ -424,9 +412,7 @@ model test_results {
   updated_at              DateTime  @db.Timestamp(6)
   test_level              Int?      @default(0)
   test_id                 Int?
-  // users                   users?    @relation(fields: [user_uuid], references: [uuid])
-
-  @@index([referee_id], name: "index_test_results_on_referee_id")
+  users                   users?    @relation(fields: [user_uuid], references: [uuid])
 }
 
 model tests {
@@ -453,54 +439,55 @@ model tests {
 }
 
 model users {
-  uuid                           String                          @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                             BigInt                          @id @default(autoincrement())
-  email                          String                          @unique @default("") @db.VarChar
-  encrypted_password             String                          @default("") @db.VarChar
-  reset_password_token           String?                         @unique @db.VarChar
-  reset_password_sent_at         DateTime?                       @db.Timestamp(6)
-  remember_created_at            DateTime?                       @db.Timestamp(6)
-  sign_in_count                  Int                             @default(0)
-  current_sign_in_at             DateTime?                       @db.Timestamp(6)
-  last_sign_in_at                DateTime?                       @db.Timestamp(6)
-  current_sign_in_ip             String?                         @db.Inet
-  last_sign_in_ip                String?                         @db.Inet
-  first_name                     String?                         @db.VarChar
-  last_name                      String?                         @db.VarChar
-  bio                            String?
-  pronouns                       String?                         @db.VarChar
-  show_pronouns                  Boolean?                        @default(false)
-  created_at                     DateTime                        @db.Timestamp(6)
-  updated_at                     DateTime                        @db.Timestamp(6)
-  submitted_payment_at           DateTime?                       @db.Timestamp(6)
-  admin                          Boolean?                        @default(false)
-  confirmation_token             String?                         @unique @db.VarChar
-  confirmed_at                   DateTime?                       @db.Timestamp(6)
-  confirmation_sent_at           DateTime?                       @db.Timestamp(6)
-  failed_attempts                Int                             @default(0)
-  unlock_token                   String?                         @unique @db.VarChar
-  locked_at                      DateTime?                       @db.Timestamp(6)
-  invitation_token               String?                         @unique @db.VarChar
-  invitation_created_at          DateTime?                       @db.Timestamp(6)
-  invitation_sent_at             DateTime?                       @db.Timestamp(6)
-  invitation_accepted_at         DateTime?                       @db.Timestamp(6)
-  invitation_limit               Int?
-  invited_by_type                String?                         @db.VarChar
-  invited_by_id                  BigInt?
-  invitations_count              Int?                            @default(0)
-  export_name                    Boolean?                        @default(true)
-  stripe_customer_id             String?                         @db.VarChar
-  language_id                    Int?
+  uuid                   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                     BigInt    @unique @default(autoincrement())
+  email                  String    @unique @default("") @db.VarChar
+  encrypted_password     String    @default("") @db.VarChar
+  reset_password_token   String?   @unique @db.VarChar
+  reset_password_sent_at DateTime? @db.Timestamp(6)
+  remember_created_at    DateTime? @db.Timestamp(6)
+  sign_in_count          Int       @default(0)
+  current_sign_in_at     DateTime? @db.Timestamp(6)
+  last_sign_in_at        DateTime? @db.Timestamp(6)
+  current_sign_in_ip     String?   @db.Inet
+  last_sign_in_ip        String?   @db.Inet
+  first_name             String?   @db.VarChar
+  last_name              String?   @db.VarChar
+  bio                    String?
+  pronouns               String?   @db.VarChar
+  show_pronouns          Boolean?  @default(false)
+  created_at             DateTime  @db.Timestamp(6)
+  updated_at             DateTime  @db.Timestamp(6)
+  submitted_payment_at   DateTime? @db.Timestamp(6)
+  admin                  Boolean?  @default(false)
+  confirmation_token     String?   @unique @db.VarChar
+  confirmed_at           DateTime? @db.Timestamp(6)
+  confirmation_sent_at   DateTime? @db.Timestamp(6)
+  failed_attempts        Int       @default(0)
+  unlock_token           String?   @unique @db.VarChar
+  locked_at              DateTime? @db.Timestamp(6)
+  invitation_token       String?   @unique @db.VarChar
+  invitation_created_at  DateTime? @db.Timestamp(6)
+  invitation_sent_at     DateTime? @db.Timestamp(6)
+  invitation_accepted_at DateTime? @db.Timestamp(6)
+  invitation_limit       Int?
+  invited_by_type        String?   @db.VarChar
+  invited_by_id          BigInt?
+  invitations_count      Int?      @default(0)
+  export_name            Boolean?  @default(true)
+  stripe_customer_id     String?   @db.VarChar
+  language_id            Int?
+
   national_governing_body_admins national_governing_body_admins?
   referee_teams                  referee_teams[]
   roles                          roles[]
-
-  // referee_answers           referee_answers[]
-  // test_results              test_results[]
-  // referee_certifications    referee_certifications[]
-  // certification_payments    certification_payments[]
-  // exported_csvs             exported_csvs[]
-  // policy_manager_user_terms policy_manager_user_terms[]
+  referee_answers                referee_answers[]
+  test_results                   test_results[]
+  referee_certifications         referee_certifications[]
+  certification_payments         certification_payments[]
+  exported_csvs                  exported_csvs[]
+  policy_manager_user_terms      policy_manager_user_terms[]
+  test_attempts                  test_attempts[]
 
   @@index([invitations_count], name: "index_users_on_invitations_count")
   @@index([invited_by_id], name: "index_users_on_invited_by_id")
