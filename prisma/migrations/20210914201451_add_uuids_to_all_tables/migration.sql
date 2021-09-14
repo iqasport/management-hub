@@ -23,13 +23,128 @@
   - A unique constraint covering the columns `[uuid]` on the table `referee_teams` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[uuid]` on the table `roles` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[uuid]` on the table `social_accounts` will be added. If there are existing duplicate values, this will fail.
+  - A unique constraint covering the columns `[uuid]` on the table `team_status_changesets` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[uuid]` on the table `teams` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[uuid]` on the table `test_attempts` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[uuid]` on the table `test_results` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[uuid]` on the table `tests` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[uuid]` on the table `users` will be added. If there are existing duplicate values, this will fail.
 
 */
+-- AlterTable
+ALTER TABLE "active_storage_attachments" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "active_storage_blobs" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "answers" ADD COLUMN     "question_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "certification_payments" ADD COLUMN     "certification_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "certifications" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "exported_csvs" ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "flipper_features" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "flipper_gates" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "languages" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "national_governing_bodies" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "national_governing_body_admins" ADD COLUMN     "national_governing_body_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "national_governing_body_stats" ADD COLUMN     "national_governing_body_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "policy_manager_portability_requests" ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "policy_manager_terms" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "policy_manager_user_terms" ADD COLUMN     "term_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "questions" ADD COLUMN     "test_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "referee_answers" ADD COLUMN     "answer_uuid" UUID,
+ADD COLUMN     "question_uuid" UUID,
+ADD COLUMN     "test_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "referee_certifications" ADD COLUMN     "certification_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "referee_locations" ADD COLUMN     "national_governing_body_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "referee_teams" ADD COLUMN     "team_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "roles" ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "social_accounts" ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "team_status_changesets" ADD COLUMN     "team_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "teams" ADD COLUMN     "national_governing_body_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "test_attempts" ADD COLUMN     "test_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "test_results" ADD COLUMN     "test_uuid" UUID,
+ADD COLUMN     "user_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "tests" ADD COLUMN     "certification_uuid" UUID,
+ADD COLUMN     "language_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "language_uuid" UUID,
+ADD COLUMN     "uuid" UUID NOT NULL DEFAULT uuid_generate_v4();
+
 -- CreateIndex
 CREATE UNIQUE INDEX "active_storage_attachments_uuid_key" ON "active_storage_attachments"("uuid");
 
@@ -97,6 +212,9 @@ CREATE UNIQUE INDEX "roles_uuid_key" ON "roles"("uuid");
 CREATE UNIQUE INDEX "social_accounts_uuid_key" ON "social_accounts"("uuid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "team_status_changesets_uuid_key" ON "team_status_changesets"("uuid");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "teams_uuid_key" ON "teams"("uuid");
 
 -- CreateIndex
@@ -107,6 +225,3 @@ CREATE UNIQUE INDEX "test_results_uuid_key" ON "test_results"("uuid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tests_uuid_key" ON "tests"("uuid");
-
--- CreateIndex
-CREATE UNIQUE INDEX "users_uuid_key" ON "users"("uuid");

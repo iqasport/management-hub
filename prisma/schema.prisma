@@ -15,16 +15,16 @@ model active_storage_attachments {
   record_id            BigInt
   blob_id              BigInt
   created_at           DateTime             @db.Timestamp(6)
-  active_storage_blobs active_storage_blobs @relation(fields: [blob_id], references: [id])
+  active_storage_blobs active_storage_blobs @relation(fields: [blob_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_c3b3935057")
 
-  @@unique([record_type, record_id, name, blob_id], name: "index_active_storage_attachments_uniqueness")
-  @@index([blob_id], name: "index_active_storage_attachments_on_blob_id")
+  @@unique([record_type, record_id, name, blob_id], map: "index_active_storage_attachments_uniqueness")
+  @@index([blob_id], map: "index_active_storage_attachments_on_blob_id")
 }
 
 model active_storage_blobs {
   uuid                       String                       @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                         BigInt                       @id @default(autoincrement())
-  key                        String                       @unique @db.VarChar
+  key                        String                       @unique(map: "index_active_storage_blobs_on_key") @db.VarChar
   filename                   String                       @db.VarChar
   content_type               String?                      @db.VarChar
   metadata                   String?
@@ -35,15 +35,14 @@ model active_storage_blobs {
 }
 
 model answers {
-  uuid        String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id          BigInt   @id @default(autoincrement())
-  question_id Int
-  description String
-  correct     Boolean  @default(false)
-  created_at  DateTime @db.Timestamp(6)
-  updated_at  DateTime @db.Timestamp(6)
-
-  // referee_answers referee_answers[]
+  uuid          String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id            BigInt   @id @default(autoincrement())
+  question_id   Int
+  question_uuid String?  @db.Uuid
+  description   String
+  correct       Boolean  @default(false)
+  created_at    DateTime @db.Timestamp(6)
+  updated_at    DateTime @db.Timestamp(6)
 }
 
 model ar_internal_metadata {
@@ -64,7 +63,6 @@ model certification_payments {
   created_at         DateTime @db.Timestamp(6)
   updated_at         DateTime @db.Timestamp(6)
   users              users?   @relation(fields: [user_uuid], references: [uuid])
-  // certifications     certifications? @relation(fields: [certification_uuid], references: [uuid])
 }
 
 model certifications {
@@ -75,9 +73,8 @@ model certifications {
   created_at   DateTime @db.Timestamp(6)
   updated_at   DateTime @db.Timestamp(6)
   version      Int?     @default(0)
-  // certification_payments certification_payments[]
 
-  @@unique([level, version], name: "index_certifications_on_level_and_version")
+  @@unique([level, version], map: "index_certifications_on_level_and_version")
 }
 
 model data_migrations {
@@ -102,7 +99,7 @@ model exported_csvs {
 model flipper_features {
   uuid       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt   @id @default(autoincrement())
-  key        String   @unique @db.VarChar
+  key        String   @unique(map: "index_flipper_features_on_key") @db.VarChar
   created_at DateTime @db.Timestamp(6)
   updated_at DateTime @db.Timestamp(6)
 }
@@ -116,7 +113,7 @@ model flipper_gates {
   created_at  DateTime @db.Timestamp(6)
   updated_at  DateTime @db.Timestamp(6)
 
-  @@unique([feature_key, key, value], name: "index_flipper_gates_on_feature_key_and_key_and_value")
+  @@unique([feature_key, key, value], map: "index_flipper_gates_on_feature_key_and_key_and_value")
 }
 
 model languages {
@@ -147,48 +144,51 @@ model national_governing_bodies {
   national_governing_body_stats  national_governing_body_stats[]
   teams                          teams[]
 
-  @@index([region], name: "index_national_governing_bodies_on_region")
+  @@index([region], map: "index_national_governing_bodies_on_region")
 }
 
 model national_governing_body_admins {
-  uuid                       String                    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                         BigInt                    @id @default(autoincrement())
-  user_id                    BigInt                    @unique
-  user_uuid                  String                    @db.Uuid
-  national_governing_body_id BigInt
-  created_at                 DateTime                  @db.Timestamp(6)
-  updated_at                 DateTime                  @db.Timestamp(6)
-  national_governing_bodies  national_governing_bodies @relation(fields: [national_governing_body_id], references: [id])
-  users                      users                     @relation(fields: [user_uuid], references: [uuid])
+  uuid                         String                    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                           BigInt                    @id @default(autoincrement())
+  user_id                      BigInt                    @unique(map: "index_national_governing_body_admins_on_user_id")
+  user_uuid                    String                    @db.Uuid
+  national_governing_body_id   BigInt
+  national_governing_body_uuid String?                   @db.Uuid
+  created_at                   DateTime                  @db.Timestamp(6)
+  updated_at                   DateTime                  @db.Timestamp(6)
+  national_governing_bodies    national_governing_bodies @relation(fields: [national_governing_body_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_e74edd8114")
+  users                        users                     @relation(fields: [user_uuid], references: [uuid])
 
-  @@index([national_governing_body_id], name: "index_national_governing_body_admins_on_ngb_id")
+
+  @@index([national_governing_body_id], map: "index_national_governing_body_admins_on_ngb_id")
 }
 
 model national_governing_body_stats {
-  uuid                       String                     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                         BigInt                     @id @default(autoincrement())
-  national_governing_body_id BigInt?
-  total_referees_count       Int?                       @default(0)
-  head_referees_count        Int?                       @default(0)
-  assistant_referees_count   Int?                       @default(0)
-  snitch_referees_count      Int?                       @default(0)
-  competitive_teams_count    Int?                       @default(0)
-  developing_teams_count     Int?                       @default(0)
-  inactive_teams_count       Int?                       @default(0)
-  youth_teams_count          Int?                       @default(0)
-  university_teams_count     Int?                       @default(0)
-  community_teams_count      Int?                       @default(0)
-  team_status_change_count   Int?                       @default(0)
-  created_at                 DateTime                   @db.Timestamp(6)
-  updated_at                 DateTime                   @db.Timestamp(6)
-  total_teams_count          Int?                       @default(0)
-  uncertified_count          Int?                       @default(0)
-  start                      DateTime?                  @db.Timestamp(6)
-  end_time                   DateTime?                  @db.Timestamp(6)
-  scorekeeper_referees_count Int?                       @default(0)
-  national_governing_bodies  national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id])
+  uuid                         String                     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                           BigInt                     @id @default(autoincrement())
+  national_governing_body_id   BigInt?
+  national_governing_body_uuid String?                    @db.Uuid
+  total_referees_count         Int?                       @default(0)
+  head_referees_count          Int?                       @default(0)
+  assistant_referees_count     Int?                       @default(0)
+  snitch_referees_count        Int?                       @default(0)
+  competitive_teams_count      Int?                       @default(0)
+  developing_teams_count       Int?                       @default(0)
+  inactive_teams_count         Int?                       @default(0)
+  youth_teams_count            Int?                       @default(0)
+  university_teams_count       Int?                       @default(0)
+  community_teams_count        Int?                       @default(0)
+  team_status_change_count     Int?                       @default(0)
+  created_at                   DateTime                   @db.Timestamp(6)
+  updated_at                   DateTime                   @db.Timestamp(6)
+  total_teams_count            Int?                       @default(0)
+  uncertified_count            Int?                       @default(0)
+  start                        DateTime?                  @db.Timestamp(6)
+  end_time                     DateTime?                  @db.Timestamp(6)
+  scorekeeper_referees_count   Int?                       @default(0)
+  national_governing_bodies    national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_ce6124f60f")
 
-  @@index([national_governing_body_id], name: "ngb_stats_on_ngb_id")
+  @@index([national_governing_body_id], map: "ngb_stats_on_ngb_id")
 }
 
 model policy_manager_portability_requests {
@@ -200,6 +200,7 @@ model policy_manager_portability_requests {
   expire_at  DateTime? @db.Timestamp(6)
   created_at DateTime  @db.Timestamp(6)
   updated_at DateTime  @db.Timestamp(6)
+  users      users     @relation(fields: [user_uuid], references: [uuid])
 }
 
 model policy_manager_terms {
@@ -212,8 +213,6 @@ model policy_manager_terms {
   rejected_at DateTime? @db.Timestamp(6)
   created_at  DateTime  @db.Timestamp(6)
   updated_at  DateTime  @db.Timestamp(6)
-
-  // policy_manager_user_terms policy_manager_user_terms[]
 }
 
 model policy_manager_user_terms {
@@ -221,16 +220,15 @@ model policy_manager_user_terms {
   id         BigInt   @id @default(autoincrement())
   user_id    Int?
   user_uuid  String   @db.Uuid
-  term_uuid  String?  @db.Uuid
   term_id    Int?
+  term_uuid  String?  @db.Uuid
   state      String?  @db.VarChar
   created_at DateTime @db.Timestamp(6)
   updated_at DateTime @db.Timestamp(6)
 
   users users? @relation(fields: [user_uuid], references: [uuid])
-  // policy_manager_terms policy_manager_terms? @relation(fields: [term_uuid], references: [uuid])
-  @@index([state], name: "index_policy_manager_user_terms_on_state")
-  @@index([term_id], name: "index_policy_manager_user_terms_on_term_id")
+  @@index([state], map: "index_policy_manager_user_terms_on_state")
+  @@index([term_id], map: "index_policy_manager_user_terms_on_term_id")
 }
 
 model questions {
@@ -243,9 +241,6 @@ model questions {
   feedback         String?
   created_at       DateTime @db.Timestamp(6)
   updated_at       DateTime @db.Timestamp(6)
-
-  // tests           tests?            @relation(fields: [test_uuid], references: [uuid])
-  // referee_answers referee_answers[]
 }
 
 model referee_answers {
@@ -264,58 +259,55 @@ model referee_answers {
   updated_at      DateTime @db.Timestamp(6)
 
   users users? @relation(fields: [user_uuid], references: [uuid])
-  // tests     tests?     @relation(fields: [test_uuid], references: [uuid])
-  // questions questions? @relation(fields: [question_uuid], references: [uuid])
-  // answers   answers?   @relation(fields: [answer_uuid], references: [uuid])
-
-  // answers   answers? @relation(fields: [answersId], references: [id])
-
-  @@index([answer_id], name: "index_referee_answers_on_answer_id")
-  @@index([question_id], name: "index_referee_answers_on_question_id")
-  @@index([test_attempt_id], name: "index_referee_answers_on_test_attempt_id")
-  @@index([test_id], name: "index_referee_answers_on_test_id")
+  @@index([answer_id], map: "index_referee_answers_on_answer_id")
+  @@index([question_id], map: "index_referee_answers_on_question_id")
+  @@index([test_attempt_id], map: "index_referee_answers_on_test_attempt_id")
+  @@index([test_id], map: "index_referee_answers_on_test_id")
 }
 
 model referee_certifications {
-  uuid             String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id               BigInt    @id @default(autoincrement())
-  referee_id       Int
-  user_uuid        String    @db.Uuid
-  certification_id Int
-  received_at      DateTime? @db.Timestamp(6)
-  revoked_at       DateTime? @db.Timestamp(6)
-  renewed_at       DateTime? @db.Timestamp(6)
-  created_at       DateTime  @db.Timestamp(6)
-  updated_at       DateTime  @db.Timestamp(6)
-  needs_renewal_at DateTime? @db.Timestamp(6)
+  uuid               String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                 BigInt    @id @default(autoincrement())
+  referee_id         Int
+  user_uuid          String    @db.Uuid
+  certification_id   Int
+  certification_uuid String?   @db.Uuid
+  received_at        DateTime? @db.Timestamp(6)
+  revoked_at         DateTime? @db.Timestamp(6)
+  renewed_at         DateTime? @db.Timestamp(6)
+  created_at         DateTime  @db.Timestamp(6)
+  updated_at         DateTime  @db.Timestamp(6)
+  needs_renewal_at   DateTime? @db.Timestamp(6)
 
   users users? @relation(fields: [user_uuid], references: [uuid])
 }
 
 model referee_locations {
-  uuid                       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                         BigInt   @id @default(autoincrement())
-  referee_id                 Int
-  user_uuid                  String   @db.Uuid
-  national_governing_body_id Int
-  created_at                 DateTime @db.Timestamp(6)
-  updated_at                 DateTime @db.Timestamp(6)
-  association_type           Int?     @default(0)
+  uuid                         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                           BigInt   @id @default(autoincrement())
+  referee_id                   Int
+  user_uuid                    String?  @db.Uuid
+  national_governing_body_id   Int
+  national_governing_body_uuid String?  @db.Uuid
+  created_at                   DateTime @db.Timestamp(6)
+  updated_at                   DateTime @db.Timestamp(6)
+  association_type             Int?     @default(0)
 }
 
 model referee_teams {
   uuid             String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id               BigInt   @id @default(autoincrement())
   team_id          BigInt?
+  team_uuid        String?  @db.Uuid
   referee_id       BigInt?
   user_uuid        String   @db.Uuid
   association_type Int?     @default(0)
   created_at       DateTime @db.Timestamp(6)
   updated_at       DateTime @db.Timestamp(6)
   users            users?   @relation(fields: [user_uuid], references: [uuid])
-  teams            teams?   @relation(fields: [team_id], references: [id])
+  teams            teams?   @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_880aef8e7d")
 
-  @@index([team_id], name: "index_referee_teams_on_team_id")
+  @@index([team_id], map: "index_referee_teams_on_team_id")
 }
 
 model roles {
@@ -343,55 +335,58 @@ model social_accounts {
   created_at   DateTime @db.Timestamp(6)
   updated_at   DateTime @db.Timestamp(6)
 
-  @@index([ownable_type, ownable_id], name: "index_social_accounts_on_ownable_type_and_ownable_id")
+  @@index([ownable_type, ownable_id], map: "index_social_accounts_on_ownable_type_and_ownable_id")
 }
 
 model team_status_changesets {
+  uuid            String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt   @id @default(autoincrement())
   team_id         BigInt?
+  team_uuid       String?  @db.Uuid
   previous_status String?  @db.VarChar
   new_status      String?  @db.VarChar
   created_at      DateTime @db.Timestamp(6)
   updated_at      DateTime @db.Timestamp(6)
-  teams           teams?   @relation(fields: [team_id], references: [id])
+  teams           teams?   @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_c3bc29f337")
 
-  @@index([team_id], name: "index_team_status_changesets_on_team_id")
+  @@index([team_id], map: "index_team_status_changesets_on_team_id")
 }
 
 model teams {
-  uuid                       String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                         BigInt    @id @default(autoincrement())
-  name                       String    @db.VarChar
-  city                       String    @db.VarChar
-  state                      String?   @db.VarChar
-  country                    String    @db.VarChar
-  status                     Int?      @default(0)
-  group_affiliation          Int?      @default(0)
-  national_governing_body_id BigInt?
-  created_at                 DateTime  @db.Timestamp(6)
-  updated_at                 DateTime  @db.Timestamp(6)
-  joined_at                  DateTime? @default(now()) @db.Timestamp(6)
+  uuid                         String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                           BigInt    @id @default(autoincrement())
+  name                         String    @db.VarChar
+  city                         String    @db.VarChar
+  state                        String?   @db.VarChar
+  country                      String    @db.VarChar
+  status                       Int?      @default(0)
+  group_affiliation            Int?      @default(0)
+  national_governing_body_id   BigInt?
+  national_governing_body_uuid String?   @db.Uuid
+  created_at                   DateTime  @db.Timestamp(6)
+  updated_at                   DateTime  @db.Timestamp(6)
+  joined_at                    DateTime? @default(now()) @db.Timestamp(6)
 
-  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id])
+  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_d1c3a2117a")
 
   referee_teams          referee_teams[]
   team_status_changesets team_status_changesets[]
 
-  @@index([national_governing_body_id], name: "index_teams_on_national_governing_body_id")
+  @@index([national_governing_body_id], map: "index_teams_on_national_governing_body_id")
 }
 
 model test_attempts {
   uuid            String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt    @id @default(autoincrement())
   test_id         Int?
+  test_uuid       String?   @db.Uuid
   referee_id      Int?
   user_uuid       String    @db.Uuid
   test_level      Int?
   next_attempt_at DateTime? @db.Timestamp(6)
   created_at      DateTime  @db.Timestamp(6)
   updated_at      DateTime  @db.Timestamp(6)
-
-  users users? @relation(fields: [user_uuid], references: [uuid])
+  users           users?    @relation(fields: [user_uuid], references: [uuid])
 }
 
 model test_results {
@@ -412,6 +407,7 @@ model test_results {
   updated_at              DateTime  @db.Timestamp(6)
   test_level              Int?      @default(0)
   test_id                 Int?
+  test_uuid               String?   @db.Uuid
   users                   users?    @relation(fields: [user_uuid], references: [uuid])
 }
 
@@ -421,6 +417,7 @@ model tests {
   level                   Int?     @default(0)
   name                    String?  @db.VarChar
   certification_id        Int?
+  certification_uuid      String?  @db.Uuid
   created_at              DateTime @db.Timestamp(6)
   updated_at              DateTime @db.Timestamp(6)
   description             String
@@ -433,17 +430,15 @@ model tests {
   testable_question_count Int      @default(0)
   recertification         Boolean? @default(false)
   new_language_id         Int?
-
-  // questions       questions[]
-  // referee_answers referee_answers[]
+  language_uuid           String?  @db.Uuid
 }
 
 model users {
   uuid                   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                     BigInt    @unique @default(autoincrement())
-  email                  String    @unique @default("") @db.VarChar
+  email                  String    @unique(map: "index_users_on_email") @default("") @db.VarChar
   encrypted_password     String    @default("") @db.VarChar
-  reset_password_token   String?   @unique @db.VarChar
+  reset_password_token   String?   @unique(map: "index_users_on_reset_password_token") @db.VarChar
   reset_password_sent_at DateTime? @db.Timestamp(6)
   remember_created_at    DateTime? @db.Timestamp(6)
   sign_in_count          Int       @default(0)
@@ -460,13 +455,13 @@ model users {
   updated_at             DateTime  @db.Timestamp(6)
   submitted_payment_at   DateTime? @db.Timestamp(6)
   admin                  Boolean?  @default(false)
-  confirmation_token     String?   @unique @db.VarChar
+  confirmation_token     String?   @unique(map: "index_users_on_confirmation_token") @db.VarChar
   confirmed_at           DateTime? @db.Timestamp(6)
   confirmation_sent_at   DateTime? @db.Timestamp(6)
   failed_attempts        Int       @default(0)
-  unlock_token           String?   @unique @db.VarChar
+  unlock_token           String?   @unique(map: "index_users_on_unlock_token") @db.VarChar
   locked_at              DateTime? @db.Timestamp(6)
-  invitation_token       String?   @unique @db.VarChar
+  invitation_token       String?   @unique(map: "index_users_on_invitation_token") @db.VarChar
   invitation_created_at  DateTime? @db.Timestamp(6)
   invitation_sent_at     DateTime? @db.Timestamp(6)
   invitation_accepted_at DateTime? @db.Timestamp(6)
@@ -477,19 +472,21 @@ model users {
   export_name            Boolean?  @default(true)
   stripe_customer_id     String?   @db.VarChar
   language_id            Int?
+  language_uuid          String?   @db.Uuid
 
-  national_governing_body_admins national_governing_body_admins?
-  referee_teams                  referee_teams[]
-  roles                          roles[]
-  referee_answers                referee_answers[]
-  test_results                   test_results[]
-  referee_certifications         referee_certifications[]
-  certification_payments         certification_payments[]
-  exported_csvs                  exported_csvs[]
-  policy_manager_user_terms      policy_manager_user_terms[]
-  test_attempts                  test_attempts[]
+  national_governing_body_admins      national_governing_body_admins[]
+  referee_teams                       referee_teams[]
+  roles                               roles[]
+  referee_answers                     referee_answers[]
+  test_results                        test_results[]
+  referee_certifications              referee_certifications[]
+  certification_payments              certification_payments[]
+  exported_csvs                       exported_csvs[]
+  policy_manager_user_terms           policy_manager_user_terms[]
+  test_attempts                       test_attempts[]
+  policy_manager_portability_requests policy_manager_portability_requests[]
 
-  @@index([invitations_count], name: "index_users_on_invitations_count")
-  @@index([invited_by_id], name: "index_users_on_invited_by_id")
-  @@index([invited_by_type, invited_by_id], name: "index_users_on_invited_by_type_and_invited_by_id")
+  @@index([invitations_count], map: "index_users_on_invitations_count")
+  @@index([invited_by_id], map: "index_users_on_invited_by_id")
+  @@index([invited_by_type, invited_by_id], map: "index_users_on_invited_by_type_and_invited_by_id")
 }

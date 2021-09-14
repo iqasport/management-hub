@@ -7,7 +7,7 @@ CREATE TABLE "active_storage_attachments" (
     "blob_id" BIGINT NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "active_storage_attachments_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -21,7 +21,7 @@ CREATE TABLE "active_storage_blobs" (
     "checksum" VARCHAR NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "active_storage_blobs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -33,7 +33,7 @@ CREATE TABLE "answers" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "answers_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -43,7 +43,7 @@ CREATE TABLE "ar_internal_metadata" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("key")
+    CONSTRAINT "ar_internal_metadata_pkey" PRIMARY KEY ("key")
 );
 
 -- CreateTable
@@ -55,7 +55,7 @@ CREATE TABLE "certification_payments" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "certification_payments_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -67,14 +67,14 @@ CREATE TABLE "certifications" (
     "updated_at" TIMESTAMP(6) NOT NULL,
     "version" INTEGER DEFAULT 0,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "certifications_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "data_migrations" (
     "version" VARCHAR NOT NULL,
 
-    PRIMARY KEY ("version")
+    CONSTRAINT "data_migrations_pkey" PRIMARY KEY ("version")
 );
 
 -- CreateTable
@@ -89,7 +89,7 @@ CREATE TABLE "exported_csvs" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "exported_csvs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -99,7 +99,7 @@ CREATE TABLE "flipper_features" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "flipper_features_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -111,7 +111,7 @@ CREATE TABLE "flipper_gates" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "flipper_gates_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -124,7 +124,7 @@ CREATE TABLE "languages" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "languages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -141,7 +141,7 @@ CREATE TABLE "national_governing_bodies" (
     "region" INTEGER,
     "membership_status" INTEGER NOT NULL DEFAULT 0,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "national_governing_bodies_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -152,7 +152,7 @@ CREATE TABLE "national_governing_body_admins" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "national_governing_body_admins_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -178,7 +178,7 @@ CREATE TABLE "national_governing_body_stats" (
     "end_time" TIMESTAMP(6),
     "scorekeeper_referees_count" INTEGER DEFAULT 0,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "national_governing_body_stats_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -190,7 +190,7 @@ CREATE TABLE "policy_manager_portability_requests" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "policy_manager_portability_requests_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -204,7 +204,7 @@ CREATE TABLE "policy_manager_terms" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "policy_manager_terms_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -216,7 +216,7 @@ CREATE TABLE "policy_manager_user_terms" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "policy_manager_user_terms_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -229,7 +229,7 @@ CREATE TABLE "questions" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "questions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -243,7 +243,7 @@ CREATE TABLE "referee_answers" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "referee_answers_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -258,7 +258,7 @@ CREATE TABLE "referee_certifications" (
     "updated_at" TIMESTAMP(6) NOT NULL,
     "needs_renewal_at" TIMESTAMP(6),
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "referee_certifications_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -270,7 +270,7 @@ CREATE TABLE "referee_locations" (
     "updated_at" TIMESTAMP(6) NOT NULL,
     "association_type" INTEGER DEFAULT 0,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "referee_locations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -282,7 +282,7 @@ CREATE TABLE "referee_teams" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "referee_teams_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -293,14 +293,14 @@ CREATE TABLE "roles" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "schema_migrations" (
     "version" VARCHAR NOT NULL,
 
-    PRIMARY KEY ("version")
+    CONSTRAINT "schema_migrations_pkey" PRIMARY KEY ("version")
 );
 
 -- CreateTable
@@ -313,7 +313,7 @@ CREATE TABLE "social_accounts" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "social_accounts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -325,7 +325,7 @@ CREATE TABLE "team_status_changesets" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "team_status_changesets_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -342,7 +342,7 @@ CREATE TABLE "teams" (
     "updated_at" TIMESTAMP(6) NOT NULL,
     "joined_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "teams_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -355,7 +355,7 @@ CREATE TABLE "test_attempts" (
     "created_at" TIMESTAMP(6) NOT NULL,
     "updated_at" TIMESTAMP(6) NOT NULL,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "test_attempts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -376,7 +376,7 @@ CREATE TABLE "test_results" (
     "test_level" INTEGER DEFAULT 0,
     "test_id" INTEGER,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "test_results_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -398,7 +398,7 @@ CREATE TABLE "tests" (
     "recertification" BOOLEAN DEFAULT false,
     "new_language_id" INTEGER,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "tests_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -441,17 +441,17 @@ CREATE TABLE "users" (
     "stripe_customer_id" VARCHAR,
     "language_id" INTEGER,
 
-    PRIMARY KEY ("id")
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments"("record_type", "record_id", "name", "blob_id");
 
 -- CreateIndex
 CREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments"("blob_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "active_storage_blobs.key_unique" ON "active_storage_blobs"("key");
+CREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments"("record_type", "record_id", "name", "blob_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs"("key");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "index_certifications_on_level_and_version" ON "certifications"("level", "version");
@@ -460,7 +460,7 @@ CREATE UNIQUE INDEX "index_certifications_on_level_and_version" ON "certificatio
 CREATE INDEX "index_exported_csvs_on_user_id" ON "exported_csvs"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "flipper_features.key_unique" ON "flipper_features"("key");
+CREATE UNIQUE INDEX "index_flipper_features_on_key" ON "flipper_features"("key");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "index_flipper_gates_on_feature_key_and_key_and_value" ON "flipper_gates"("feature_key", "key", "value");
@@ -469,7 +469,7 @@ CREATE UNIQUE INDEX "index_flipper_gates_on_feature_key_and_key_and_value" ON "f
 CREATE INDEX "index_national_governing_bodies_on_region" ON "national_governing_bodies"("region");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "national_governing_body_admins.user_id_unique" ON "national_governing_body_admins"("user_id");
+CREATE UNIQUE INDEX "index_national_governing_body_admins_on_user_id" ON "national_governing_body_admins"("user_id");
 
 -- CreateIndex
 CREATE INDEX "index_national_governing_body_admins_on_ngb_id" ON "national_governing_body_admins"("national_governing_body_id");
@@ -508,19 +508,19 @@ CREATE INDEX "index_referee_answers_on_test_id" ON "referee_answers"("test_id");
 CREATE UNIQUE INDEX "index_referee_locations_on_referee_id_and_ngb_id" ON "referee_locations"("referee_id", "national_governing_body_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "index_referee_teams_on_referee_id_and_association_type" ON "referee_teams"("referee_id", "association_type");
-
--- CreateIndex
 CREATE INDEX "index_referee_teams_on_referee_id" ON "referee_teams"("referee_id");
 
 -- CreateIndex
 CREATE INDEX "index_referee_teams_on_team_id" ON "referee_teams"("team_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "index_roles_on_user_id_and_access_type" ON "roles"("user_id", "access_type");
+CREATE UNIQUE INDEX "index_referee_teams_on_referee_id_and_association_type" ON "referee_teams"("referee_id", "association_type");
 
 -- CreateIndex
 CREATE INDEX "index_roles_on_user_id" ON "roles"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "index_roles_on_user_id_and_access_type" ON "roles"("user_id", "access_type");
 
 -- CreateIndex
 CREATE INDEX "index_social_accounts_on_ownable_type_and_ownable_id" ON "social_accounts"("ownable_type", "ownable_id");
@@ -535,19 +535,19 @@ CREATE INDEX "index_teams_on_national_governing_body_id" ON "teams"("national_go
 CREATE INDEX "index_test_results_on_referee_id" ON "test_results"("referee_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users.email_unique" ON "users"("email");
+CREATE UNIQUE INDEX "index_users_on_email" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users.reset_password_token_unique" ON "users"("reset_password_token");
+CREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users"("reset_password_token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users.confirmation_token_unique" ON "users"("confirmation_token");
+CREATE UNIQUE INDEX "index_users_on_confirmation_token" ON "users"("confirmation_token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users.unlock_token_unique" ON "users"("unlock_token");
+CREATE UNIQUE INDEX "index_users_on_unlock_token" ON "users"("unlock_token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users.invitation_token_unique" ON "users"("invitation_token");
+CREATE UNIQUE INDEX "index_users_on_invitation_token" ON "users"("invitation_token");
 
 -- CreateIndex
 CREATE INDEX "index_users_on_invitations_count" ON "users"("invitations_count");
@@ -559,28 +559,28 @@ CREATE INDEX "index_users_on_invited_by_id" ON "users"("invited_by_id");
 CREATE INDEX "index_users_on_invited_by_type_and_invited_by_id" ON "users"("invited_by_type", "invited_by_id");
 
 -- AddForeignKey
-ALTER TABLE "active_storage_attachments" ADD FOREIGN KEY ("blob_id") REFERENCES "active_storage_blobs"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "active_storage_attachments" ADD CONSTRAINT "fk_rails_c3b3935057" FOREIGN KEY ("blob_id") REFERENCES "active_storage_blobs"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "national_governing_body_admins" ADD FOREIGN KEY ("national_governing_body_id") REFERENCES "national_governing_bodies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "national_governing_body_admins" ADD CONSTRAINT "fk_rails_e74edd8114" FOREIGN KEY ("national_governing_body_id") REFERENCES "national_governing_bodies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "national_governing_body_admins" ADD FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "national_governing_body_admins" ADD CONSTRAINT "fk_rails_c6796ff8f7" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "national_governing_body_stats" ADD FOREIGN KEY ("national_governing_body_id") REFERENCES "national_governing_bodies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "national_governing_body_stats" ADD CONSTRAINT "fk_rails_ce6124f60f" FOREIGN KEY ("national_governing_body_id") REFERENCES "national_governing_bodies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "referee_teams" ADD FOREIGN KEY ("referee_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "referee_teams" ADD CONSTRAINT "fk_rails_f8aaa19a7b" FOREIGN KEY ("referee_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "referee_teams" ADD FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "referee_teams" ADD CONSTRAINT "fk_rails_880aef8e7d" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "roles" ADD FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "roles" ADD CONSTRAINT "fk_rails_ab35d699f0" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "team_status_changesets" ADD FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "team_status_changesets" ADD CONSTRAINT "fk_rails_c3bc29f337" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "teams" ADD FOREIGN KEY ("national_governing_body_id") REFERENCES "national_governing_bodies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "teams" ADD CONSTRAINT "fk_rails_d1c3a2117a" FOREIGN KEY ("national_governing_body_id") REFERENCES "national_governing_bodies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
