@@ -61,23 +61,30 @@ model certification_payments {
   uuid               String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                 BigInt   @id @default(autoincrement())
   user_uuid          String   @db.Uuid
-  certification_id   Int
   certification_uuid String?  @db.Uuid
   stripe_session_id  String   @db.VarChar
   created_at         DateTime @db.Timestamp(6)
   updated_at         DateTime @db.Timestamp(6)
-  users              users?   @relation(fields: [user_uuid], references: [uuid])
+
+  users          users?          @relation(fields: [user_uuid], references: [uuid])
+  certifications certifications? @relation(fields: [certification_uuid], references: [uuid])
+
+  @@index([certification_uuid])
 }
 
 model certifications {
-  uuid         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id           BigInt   @id @default(autoincrement())
+  uuid         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id           BigInt   @unique @default(autoincrement())
   level        Int
   display_name String   @default("") @db.VarChar
   created_at   DateTime @db.Timestamp(6)
   updated_at   DateTime @db.Timestamp(6)
   version      Int?     @default(0)
 
+
+  certification_payments certification_payments[]
+  referee_certifications referee_certifications[]
+  tests                  tests[]
   @@unique([level, version], map: "index_certifications_on_level_and_version")
 }
 
@@ -283,7 +290,6 @@ model referee_certifications {
   uuid               String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                 BigInt    @id @default(autoincrement())
   user_uuid          String    @db.Uuid
-  certification_id   Int
   certification_uuid String?   @db.Uuid
   received_at        DateTime? @db.Timestamp(6)
   revoked_at         DateTime? @db.Timestamp(6)
@@ -292,7 +298,10 @@ model referee_certifications {
   updated_at         DateTime  @db.Timestamp(6)
   needs_renewal_at   DateTime? @db.Timestamp(6)
 
-  users users? @relation(fields: [user_uuid], references: [uuid])
+  certifications certifications? @relation(fields: [certification_uuid], references: [uuid])
+  users          users?          @relation(fields: [user_uuid], references: [uuid])
+
+  @@index([certification_uuid])
 }
 
 model referee_locations {
@@ -433,7 +442,6 @@ model tests {
   id                      BigInt   @unique @default(autoincrement())
   level                   Int?     @default(0)
   name                    String?  @db.VarChar
-  certification_id        Int?
   certification_uuid      String?  @db.Uuid
   created_at              DateTime @db.Timestamp(6)
   updated_at              DateTime @db.Timestamp(6)
@@ -449,10 +457,14 @@ model tests {
   new_language_id         Int?
   language_uuid           String?  @db.Uuid
 
+  certifications certifications? @relation(fields: [certification_uuid], references: [uuid])
+
   questions       questions[]
   referee_answers referee_answers[]
   test_attempts   test_attempts[]
   test_results    test_results[]
+
+  @@index([certification_uuid])
 }
 
 model users {
