@@ -149,6 +149,7 @@ model national_governing_bodies {
   national_governing_body_admins national_governing_body_admins[]
   national_governing_body_stats  national_governing_body_stats[]
   teams                          teams[]
+  referee_locations              referee_locations[]
 
   @@index([region], map: "index_national_governing_bodies_on_region")
 }
@@ -298,11 +299,14 @@ model referee_locations {
   uuid                         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id                           BigInt   @id @default(autoincrement())
   user_uuid                    String?  @db.Uuid
-  national_governing_body_id   Int
   national_governing_body_uuid String?  @db.Uuid
   created_at                   DateTime @db.Timestamp(6)
   updated_at                   DateTime @db.Timestamp(6)
   association_type             Int?     @default(0)
+
+  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_uuid], references: [uuid])
+
+  @@index([national_governing_body_uuid])
 }
 
 model referee_teams {
