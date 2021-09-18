@@ -218,31 +218,33 @@ model policy_manager_portability_requests {
 }
 
 model policy_manager_terms {
-  uuid        String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id          BigInt    @id @default(autoincrement())
-  description String?
-  rule        String?   @db.VarChar
-  state       String?   @db.VarChar
-  accepted_at DateTime? @db.Timestamp(6)
-  rejected_at DateTime? @db.Timestamp(6)
-  created_at  DateTime  @db.Timestamp(6)
-  updated_at  DateTime  @db.Timestamp(6)
+  uuid                      String                      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                        BigInt                      @unique @default(autoincrement())
+  description               String?
+  rule                      String?                     @db.VarChar
+  state                     String?                     @db.VarChar
+  accepted_at               DateTime?                   @db.Timestamp(6)
+  rejected_at               DateTime?                   @db.Timestamp(6)
+  created_at                DateTime                    @db.Timestamp(6)
+  updated_at                DateTime                    @db.Timestamp(6)
+  policy_manager_user_terms policy_manager_user_terms[]
 }
 
 model policy_manager_user_terms {
   uuid       String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id         BigInt   @id @default(autoincrement())
   user_uuid  String   @db.Uuid
-  term_id    Int?
   term_uuid  String?  @db.Uuid
   state      String?  @db.VarChar
   created_at DateTime @db.Timestamp(6)
   updated_at DateTime @db.Timestamp(6)
 
-  users users? @relation(fields: [user_uuid], references: [uuid])
+  users                users?                @relation(fields: [user_uuid], references: [uuid])
+  policy_manager_terms policy_manager_terms? @relation(fields: [term_uuid], references: [uuid])
+
   @@index([state], map: "index_policy_manager_user_terms_on_state")
-  @@index([term_id], map: "index_policy_manager_user_terms_on_term_id")
   @@index([user_uuid])
+  @@index([term_uuid])
 }
 
 model questions {
@@ -522,8 +524,4 @@ model users {
   policy_manager_user_terms           policy_manager_user_terms[]
   test_attempts                       test_attempts[]
   policy_manager_portability_requests policy_manager_portability_requests[]
-
-  @@index([invitations_count], map: "index_users_on_invitations_count")
-  @@index([invited_by_id], map: "index_users_on_invited_by_id")
-  @@index([invited_by_type, invited_by_id], map: "index_users_on_invited_by_type_and_invited_by_id")
 }
