@@ -318,7 +318,6 @@ async function main() {
 
   await prisma.tests.create({
     data: {
-      id: 1,
       name: 'Snitch Referee Written Test 2018–20',
       created_at: new Date(),
       updated_at: new Date(),
@@ -329,10 +328,8 @@ async function main() {
         'Congratulations!  You have passed the Snitch Referee exam! This means you are now a fully certified IQA Snitch Referee! Please ensure that you continue to develop your referee skills over time using the resources provided on the IQA Referees website!',
       negative_feedback:
         'Unfortunately, you have not passed the Snitch Referee exam. At this time, you will have to wait 24 hours before attempting this exam again. Study up!',
-      language: 'English',
       active: true,
       testable_question_count: 20,
-      new_language_id: 1,
       level: 0,
     },
   });
