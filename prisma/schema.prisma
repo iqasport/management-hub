@@ -105,8 +105,7 @@ model exported_csvs {
 }
 
 model languages {
-  uuid         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id           BigInt   @id @default(autoincrement())
+  uuid         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   long_name    String   @default("english") @db.VarChar
   short_name   String   @default("en") @db.VarChar
   long_region  String?  @db.VarChar
