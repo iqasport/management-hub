@@ -133,18 +133,19 @@ model languages {
 }
 
 model national_governing_bodies {
-  uuid                           String                           @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                             BigInt                           @id @default(autoincrement())
-  name                           String                           @db.VarChar
-  website                        String?                          @db.VarChar
-  created_at                     DateTime                         @db.Timestamp(6)
-  updated_at                     DateTime                         @db.Timestamp(6)
-  player_count                   Int                              @default(0)
-  image_url                      String?                          @db.VarChar
-  country                        String?                          @db.VarChar
-  acronym                        String?                          @db.VarChar
-  region                         Int?
-  membership_status              Int                              @default(0)
+  uuid              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                BigInt   @unique @default(autoincrement())
+  name              String   @db.VarChar
+  website           String?  @db.VarChar
+  created_at        DateTime @db.Timestamp(6)
+  updated_at        DateTime @db.Timestamp(6)
+  player_count      Int      @default(0)
+  image_url         String?  @db.VarChar
+  country           String?  @db.VarChar
+  acronym           String?  @db.VarChar
+  region            Int?
+  membership_status Int      @default(0)
+
   national_governing_body_admins national_governing_body_admins[]
   national_governing_body_stats  national_governing_body_stats[]
   teams                          teams[]
@@ -153,46 +154,46 @@ model national_governing_bodies {
 }
 
 model national_governing_body_admins {
-  uuid                         String                    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                           BigInt                    @id @default(autoincrement())
-  user_uuid                    String                    @db.Uuid
-  national_governing_body_id   BigInt
-  national_governing_body_uuid String?                   @db.Uuid
-  created_at                   DateTime                  @db.Timestamp(6)
-  updated_at                   DateTime                  @db.Timestamp(6)
-  national_governing_bodies    national_governing_bodies @relation(fields: [national_governing_body_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_e74edd8114")
-  users                        users                     @relation(fields: [user_uuid], references: [uuid])
+  uuid                         String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                           BigInt   @id @default(autoincrement())
+  user_uuid                    String   @db.Uuid
+  national_governing_body_uuid String?  @db.Uuid
+  created_at                   DateTime @db.Timestamp(6)
+  updated_at                   DateTime @db.Timestamp(6)
+
+  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_uuid], references: [uuid])
+  users                     users                      @relation(fields: [user_uuid], references: [uuid])
 
   @@index([user_uuid])
-  @@index([national_governing_body_id], map: "index_national_governing_body_admins_on_ngb_id")
+  @@index([national_governing_body_uuid])
 }
 
 model national_governing_body_stats {
-  uuid                         String                     @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                           BigInt                     @id @default(autoincrement())
-  national_governing_body_id   BigInt?
-  national_governing_body_uuid String?                    @db.Uuid
-  total_referees_count         Int?                       @default(0)
-  head_referees_count          Int?                       @default(0)
-  assistant_referees_count     Int?                       @default(0)
-  snitch_referees_count        Int?                       @default(0)
-  competitive_teams_count      Int?                       @default(0)
-  developing_teams_count       Int?                       @default(0)
-  inactive_teams_count         Int?                       @default(0)
-  youth_teams_count            Int?                       @default(0)
-  university_teams_count       Int?                       @default(0)
-  community_teams_count        Int?                       @default(0)
-  team_status_change_count     Int?                       @default(0)
-  created_at                   DateTime                   @db.Timestamp(6)
-  updated_at                   DateTime                   @db.Timestamp(6)
-  total_teams_count            Int?                       @default(0)
-  uncertified_count            Int?                       @default(0)
-  start                        DateTime?                  @db.Timestamp(6)
-  end_time                     DateTime?                  @db.Timestamp(6)
-  scorekeeper_referees_count   Int?                       @default(0)
-  national_governing_bodies    national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_ce6124f60f")
+  uuid                         String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                           BigInt    @id @default(autoincrement())
+  national_governing_body_uuid String?   @db.Uuid
+  total_referees_count         Int?      @default(0)
+  head_referees_count          Int?      @default(0)
+  assistant_referees_count     Int?      @default(0)
+  snitch_referees_count        Int?      @default(0)
+  competitive_teams_count      Int?      @default(0)
+  developing_teams_count       Int?      @default(0)
+  inactive_teams_count         Int?      @default(0)
+  youth_teams_count            Int?      @default(0)
+  university_teams_count       Int?      @default(0)
+  community_teams_count        Int?      @default(0)
+  team_status_change_count     Int?      @default(0)
+  created_at                   DateTime  @db.Timestamp(6)
+  updated_at                   DateTime  @db.Timestamp(6)
+  total_teams_count            Int?      @default(0)
+  uncertified_count            Int?      @default(0)
+  start                        DateTime? @db.Timestamp(6)
+  end_time                     DateTime? @db.Timestamp(6)
+  scorekeeper_referees_count   Int?      @default(0)
 
-  @@index([national_governing_body_id], map: "ngb_stats_on_ngb_id")
+  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_uuid], references: [uuid])
+
+  @@index([national_governing_body_uuid])
 }
 
 model policy_manager_portability_requests {
@@ -370,18 +371,17 @@ model teams {
   country                      String    @db.VarChar
   status                       Int?      @default(0)
   group_affiliation            Int?      @default(0)
-  national_governing_body_id   BigInt?
   national_governing_body_uuid String?   @db.Uuid
   created_at                   DateTime  @db.Timestamp(6)
   updated_at                   DateTime  @db.Timestamp(6)
   joined_at                    DateTime? @default(now()) @db.Timestamp(6)
 
-  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_d1c3a2117a")
+  national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_uuid], references: [uuid])
 
   referee_teams          referee_teams[]
   team_status_changesets team_status_changesets[]
 
-  @@index([national_governing_body_id], map: "index_teams_on_national_governing_body_id")
+  @@index([national_governing_body_uuid])
 }
 
 model test_attempts {
