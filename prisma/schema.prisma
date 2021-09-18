@@ -117,6 +117,7 @@ model languages {
   short_region String?  @db.VarChar
   created_at   DateTime @db.Timestamp(6)
   updated_at   DateTime @db.Timestamp(6)
+  tests        tests[]
 }
 
 model national_governing_bodies {
@@ -435,14 +436,13 @@ model tests {
   minimum_pass_percentage Int      @default(80)
   positive_feedback       String?
   negative_feedback       String?
-  language                String?  @db.VarChar
   active                  Boolean  @default(false)
   testable_question_count Int      @default(0)
   recertification         Boolean? @default(false)
-  new_language_id         Int?
   language_uuid           String?  @db.Uuid
 
   certifications certifications? @relation(fields: [certification_uuid], references: [uuid])
+  languages      languages?      @relation(fields: [language_uuid], references: [uuid])
 
   questions       questions[]
   referee_answers referee_answers[]
@@ -450,6 +450,7 @@ model tests {
   test_results    test_results[]
 
   @@index([certification_uuid])
+  @@index([language_uuid])
 }
 
 model users {
@@ -490,8 +491,6 @@ model users {
   invitations_count      Int?      @default(0)
   export_name            Boolean?  @default(true)
   stripe_customer_id     String?   @db.VarChar
-  language_id            Int?
-  language_uuid          String?   @db.Uuid
 
   national_governing_body_admins      national_governing_body_admins[]
   referee_teams                       referee_teams[]
