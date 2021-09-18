@@ -35,8 +35,8 @@ model active_storage_blobs {
 }
 
 model answers {
-  uuid          String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id            BigInt   @id @default(autoincrement())
+  uuid          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id            BigInt   @unique @default(autoincrement())
   question_uuid String?  @db.Uuid
   description   String
   correct       Boolean  @default(false)
@@ -44,6 +44,8 @@ model answers {
   updated_at    DateTime @db.Timestamp(6)
 
   questions questions? @relation(fields: [question_uuid], references: [uuid])
+
+  referee_answers referee_answers[]
 
   @@index([question_uuid])
 }
@@ -258,7 +260,6 @@ model referee_answers {
   user_uuid       String   @db.Uuid
   test_uuid       String?  @db.Uuid
   question_uuid   String?  @db.Uuid
-  answer_id       BigInt
   answer_uuid     String?  @db.Uuid
   test_attempt_id BigInt
   created_at      DateTime @db.Timestamp(6)
@@ -267,12 +268,13 @@ model referee_answers {
   users     users?     @relation(fields: [user_uuid], references: [uuid])
   tests     tests?     @relation(fields: [test_uuid], references: [uuid])
   questions questions? @relation(fields: [question_uuid], references: [uuid])
+  answers   answers?   @relation(fields: [answer_uuid], references: [uuid])
 
-  @@index([answer_id], map: "index_referee_answers_on_answer_id")
   @@index([test_attempt_id], map: "index_referee_answers_on_test_attempt_id")
   @@index([user_uuid])
   @@index([test_uuid])
   @@index([question_uuid])
+  @@index([answer_uuid])
 }
 
 model referee_certifications {
