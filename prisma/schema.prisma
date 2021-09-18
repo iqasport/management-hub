@@ -7,33 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model active_storage_attachments {
-  uuid                 String               @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                   BigInt               @id @default(autoincrement())
-  name                 String               @db.VarChar
-  record_type          String               @db.VarChar
-  record_id            BigInt
-  blob_id              BigInt
-  created_at           DateTime             @db.Timestamp(6)
-  active_storage_blobs active_storage_blobs @relation(fields: [blob_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_c3b3935057")
-
-  @@unique([record_type, record_id, name, blob_id], map: "index_active_storage_attachments_uniqueness")
-  @@index([blob_id], map: "index_active_storage_attachments_on_blob_id")
-}
-
-model active_storage_blobs {
-  uuid                       String                       @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                         BigInt                       @id @default(autoincrement())
-  key                        String                       @unique(map: "index_active_storage_blobs_on_key") @db.VarChar
-  filename                   String                       @db.VarChar
-  content_type               String?                      @db.VarChar
-  metadata                   String?
-  byte_size                  BigInt
-  checksum                   String                       @db.VarChar
-  created_at                 DateTime                     @db.Timestamp(6)
-  active_storage_attachments active_storage_attachments[]
-}
-
 model answers {
   uuid          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   question_uuid String?  @db.Uuid
@@ -47,13 +20,6 @@ model answers {
   referee_answers referee_answers[]
 
   @@index([question_uuid])
-}
-
-model ar_internal_metadata {
-  key        String   @id @db.VarChar
-  value      String?  @db.VarChar
-  created_at DateTime @db.Timestamp(6)
-  updated_at DateTime @db.Timestamp(6)
 }
 
 model certification_payments {
@@ -82,26 +48,8 @@ model certifications {
   certification_payments certification_payments[]
   referee_certifications referee_certifications[]
   tests                  tests[]
+
   @@unique([level, version], map: "index_certifications_on_level_and_version")
-}
-
-model data_migrations {
-  version String @id @db.VarChar
-}
-
-model exported_csvs {
-  uuid           String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  type           String?   @db.VarChar
-  user_uuid      String    @db.Uuid
-  url            String?   @db.VarChar
-  processed_at   DateTime? @db.Timestamp(6)
-  sent_at        DateTime? @db.Timestamp(6)
-  export_options Json      @default("{}") @db.Json
-  created_at     DateTime  @db.Timestamp(6)
-  updated_at     DateTime  @db.Timestamp(6)
-  users          users?    @relation(fields: [user_uuid], references: [uuid])
-
-  @@index([user_uuid])
 }
 
 model languages {
@@ -175,18 +123,6 @@ model national_governing_body_stats {
   national_governing_bodies national_governing_bodies? @relation(fields: [national_governing_body_uuid], references: [uuid])
 
   @@index([national_governing_body_uuid])
-}
-
-model policy_manager_portability_requests {
-  uuid       String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_uuid  String    @db.Uuid
-  state      String?   @db.VarChar
-  expire_at  DateTime? @db.Timestamp(6)
-  created_at DateTime  @db.Timestamp(6)
-  updated_at DateTime  @db.Timestamp(6)
-  users      users     @relation(fields: [user_uuid], references: [uuid])
-
-  @@index([user_uuid])
 }
 
 model policy_manager_terms {
@@ -311,10 +247,6 @@ model roles {
 
   @@index([user_uuid])
   @@index([user_uuid, access_type])
-}
-
-model schema_migrations {
-  version String @id @db.VarChar
 }
 
 model team_status_changesets {
@@ -446,26 +378,16 @@ model users {
   failed_attempts        Int       @default(0)
   unlock_token           String?   @unique(map: "index_users_on_unlock_token") @db.VarChar
   locked_at              DateTime? @db.Timestamp(6)
-  invitation_token       String?   @unique(map: "index_users_on_invitation_token") @db.VarChar
-  invitation_created_at  DateTime? @db.Timestamp(6)
-  invitation_sent_at     DateTime? @db.Timestamp(6)
-  invitation_accepted_at DateTime? @db.Timestamp(6)
-  invitation_limit       Int?
-  invited_by_type        String?   @db.VarChar
-  invited_by_id          BigInt?
-  invitations_count      Int?      @default(0)
   export_name            Boolean?  @default(true)
   stripe_customer_id     String?   @db.VarChar
 
-  national_governing_body_admins      national_governing_body_admins[]
-  referee_teams                       referee_teams[]
-  roles                               roles[]
-  referee_answers                     referee_answers[]
-  test_results                        test_results[]
-  referee_certifications              referee_certifications[]
-  certification_payments              certification_payments[]
-  exported_csvs                       exported_csvs[]
-  policy_manager_user_terms           policy_manager_user_terms[]
-  test_attempts                       test_attempts[]
-  policy_manager_portability_requests policy_manager_portability_requests[]
+  national_governing_body_admins national_governing_body_admins[]
+  referee_teams                  referee_teams[]
+  roles                          roles[]
+  referee_answers                referee_answers[]
+  test_results                   test_results[]
+  referee_certifications         referee_certifications[]
+  certification_payments         certification_payments[]
+  policy_manager_user_terms      policy_manager_user_terms[]
+  test_attempts                  test_attempts[]
 }
