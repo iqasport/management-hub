@@ -264,22 +264,23 @@ model questions {
 }
 
 model referee_answers {
-  uuid            String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id              BigInt   @id @default(autoincrement())
-  user_uuid       String   @db.Uuid
-  test_uuid       String?  @db.Uuid
-  question_uuid   String?  @db.Uuid
-  answer_uuid     String?  @db.Uuid
-  test_attempt_id BigInt
-  created_at      DateTime @db.Timestamp(6)
-  updated_at      DateTime @db.Timestamp(6)
+  uuid              String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                BigInt   @id @default(autoincrement())
+  user_uuid         String   @db.Uuid
+  test_uuid         String?  @db.Uuid
+  question_uuid     String?  @db.Uuid
+  answer_uuid       String?  @db.Uuid
+  test_attempt_uuid String?  @db.Uuid
+  created_at        DateTime @db.Timestamp(6)
+  updated_at        DateTime @db.Timestamp(6)
 
-  users     users?     @relation(fields: [user_uuid], references: [uuid])
-  tests     tests?     @relation(fields: [test_uuid], references: [uuid])
-  questions questions? @relation(fields: [question_uuid], references: [uuid])
-  answers   answers?   @relation(fields: [answer_uuid], references: [uuid])
+  users         users?         @relation(fields: [user_uuid], references: [uuid])
+  tests         tests?         @relation(fields: [test_uuid], references: [uuid])
+  questions     questions?     @relation(fields: [question_uuid], references: [uuid])
+  answers       answers?       @relation(fields: [answer_uuid], references: [uuid])
+  test_attempts test_attempts? @relation(fields: [test_attempt_uuid], references: [uuid])
 
-  @@index([test_attempt_id], map: "index_referee_answers_on_test_attempt_id")
+  @@index([test_attempt_uuid])
   @@index([user_uuid])
   @@index([test_uuid])
   @@index([question_uuid])
@@ -398,8 +399,8 @@ model teams {
 }
 
 model test_attempts {
-  uuid            String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id              BigInt    @id @default(autoincrement())
+  uuid            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id              BigInt    @unique @default(autoincrement())
   test_uuid       String?   @db.Uuid
   user_uuid       String    @db.Uuid
   test_level      Int?
@@ -408,6 +409,8 @@ model test_attempts {
   updated_at      DateTime  @db.Timestamp(6)
   users           users?    @relation(fields: [user_uuid], references: [uuid])
   tests           tests?    @relation(fields: [test_uuid], references: [uuid])
+
+  referee_answers referee_answers[]
 
   @@index([user_uuid])
   @@index([test_uuid])
