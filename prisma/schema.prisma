@@ -37,12 +37,15 @@ model active_storage_blobs {
 model answers {
   uuid          String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id            BigInt   @id @default(autoincrement())
-  question_id   Int
   question_uuid String?  @db.Uuid
   description   String
   correct       Boolean  @default(false)
   created_at    DateTime @db.Timestamp(6)
   updated_at    DateTime @db.Timestamp(6)
+
+  questions questions? @relation(fields: [question_uuid], references: [uuid])
+
+  @@index([question_uuid])
 }
 
 model ar_internal_metadata {
@@ -232,24 +235,28 @@ model policy_manager_user_terms {
 }
 
 model questions {
-  uuid             String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id               BigInt   @id @default(autoincrement())
-  test_id          Int
+  uuid             String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id               BigInt   @unique @default(autoincrement())
   test_uuid        String?  @db.Uuid
   description      String
   points_available Int      @default(1)
   feedback         String?
   created_at       DateTime @db.Timestamp(6)
   updated_at       DateTime @db.Timestamp(6)
+
+  tests tests? @relation(fields: [test_uuid], references: [uuid])
+
+  answers         answers[]
+  referee_answers referee_answers[]
+
+  @@index([test_uuid])
 }
 
 model referee_answers {
   uuid            String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt   @id @default(autoincrement())
   user_uuid       String   @db.Uuid
-  test_id         BigInt
   test_uuid       String?  @db.Uuid
-  question_id     BigInt
   question_uuid   String?  @db.Uuid
   answer_id       BigInt
   answer_uuid     String?  @db.Uuid
@@ -257,12 +264,15 @@ model referee_answers {
   created_at      DateTime @db.Timestamp(6)
   updated_at      DateTime @db.Timestamp(6)
 
-  users users? @relation(fields: [user_uuid], references: [uuid])
+  users     users?     @relation(fields: [user_uuid], references: [uuid])
+  tests     tests?     @relation(fields: [test_uuid], references: [uuid])
+  questions questions? @relation(fields: [question_uuid], references: [uuid])
+
   @@index([answer_id], map: "index_referee_answers_on_answer_id")
-  @@index([question_id], map: "index_referee_answers_on_question_id")
   @@index([test_attempt_id], map: "index_referee_answers_on_test_attempt_id")
-  @@index([test_id], map: "index_referee_answers_on_test_id")
   @@index([user_uuid])
+  @@index([test_uuid])
+  @@index([question_uuid])
 }
 
 model referee_certifications {
@@ -375,7 +385,6 @@ model teams {
 model test_attempts {
   uuid            String    @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   id              BigInt    @id @default(autoincrement())
-  test_id         Int?
   test_uuid       String?   @db.Uuid
   user_uuid       String    @db.Uuid
   test_level      Int?
@@ -383,6 +392,10 @@ model test_attempts {
   created_at      DateTime  @db.Timestamp(6)
   updated_at      DateTime  @db.Timestamp(6)
   users           users?    @relation(fields: [user_uuid], references: [uuid])
+  tests           tests?    @relation(fields: [test_uuid], references: [uuid])
+
+  @@index([user_uuid])
+  @@index([test_uuid])
 }
 
 model test_results {
@@ -401,16 +414,17 @@ model test_results {
   created_at              DateTime  @db.Timestamp(6)
   updated_at              DateTime  @db.Timestamp(6)
   test_level              Int?      @default(0)
-  test_id                 Int?
   test_uuid               String?   @db.Uuid
   users                   users?    @relation(fields: [user_uuid], references: [uuid])
+  tests                   tests?    @relation(fields: [test_uuid], references: [uuid])
 
+  @@index([test_uuid])
   @@index([user_uuid])
 }
 
 model tests {
-  uuid                    String   @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  id                      BigInt   @id @default(autoincrement())
+  uuid                    String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                      BigInt   @unique @default(autoincrement())
   level                   Int?     @default(0)
   name                    String?  @db.VarChar
   certification_id        Int?
@@ -428,6 +442,11 @@ model tests {
   recertification         Boolean? @default(false)
   new_language_id         Int?
   language_uuid           String?  @db.Uuid
+
+  questions       questions[]
+  referee_answers referee_answers[]
+  test_attempts   test_attempts[]
+  test_results    test_results[]
 }
 
 model users {
