@@ -317,18 +317,6 @@ model schema_migrations {
   version String @id @db.VarChar
 }
 
-model social_accounts {
-  uuid         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  ownable_type String?  @db.VarChar
-  ownable_id   BigInt?
-  url          String   @db.VarChar
-  account_type Int      @default(0)
-  created_at   DateTime @db.Timestamp(6)
-  updated_at   DateTime @db.Timestamp(6)
-
-  @@index([ownable_type, ownable_id], map: "index_social_accounts_on_ownable_type_and_ownable_id")
-}
-
 model team_status_changesets {
   uuid            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   team_uuid       String   @db.Uuid
