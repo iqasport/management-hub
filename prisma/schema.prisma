@@ -49,7 +49,7 @@ model certifications {
   referee_certifications referee_certifications[]
   tests                  tests[]
 
-  @@unique([level, version], map: "index_certifications_on_level_and_version")
+  @@unique([level, version])
 }
 
 model languages {
@@ -81,7 +81,7 @@ model national_governing_bodies {
   teams                          teams[]
   referee_locations              referee_locations[]
 
-  @@index([region], map: "index_national_governing_bodies_on_region")
+  @@index([region])
 }
 
 model national_governing_body_admins {
@@ -148,7 +148,7 @@ model policy_manager_user_terms {
   users                users?                @relation(fields: [user_uuid], references: [uuid])
   policy_manager_terms policy_manager_terms? @relation(fields: [term_uuid], references: [uuid])
 
-  @@index([state], map: "index_policy_manager_user_terms_on_state")
+  @@index([state])
   @@index([user_uuid])
   @@index([term_uuid])
 }
@@ -353,9 +353,9 @@ model tests {
 
 model users {
   uuid                   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  email                  String    @unique(map: "index_users_on_email") @default("") @db.VarChar
+  email                  String    @unique @default("") @db.VarChar
   encrypted_password     String    @default("") @db.VarChar
-  reset_password_token   String?   @unique(map: "index_users_on_reset_password_token") @db.VarChar
+  reset_password_token   String?   @unique @db.VarChar
   reset_password_sent_at DateTime? @db.Timestamp(6)
   remember_created_at    DateTime? @db.Timestamp(6)
   sign_in_count          Int       @default(0)
@@ -372,11 +372,11 @@ model users {
   updated_at             DateTime  @db.Timestamp(6)
   submitted_payment_at   DateTime? @db.Timestamp(6)
   admin                  Boolean?  @default(false)
-  confirmation_token     String?   @unique(map: "index_users_on_confirmation_token") @db.VarChar
+  confirmation_token     String?   @unique @db.VarChar
   confirmed_at           DateTime? @db.Timestamp(6)
   confirmation_sent_at   DateTime? @db.Timestamp(6)
   failed_attempts        Int       @default(0)
-  unlock_token           String?   @unique(map: "index_users_on_unlock_token") @db.VarChar
+  unlock_token           String?   @unique @db.VarChar
   locked_at              DateTime? @db.Timestamp(6)
   export_name            Boolean?  @default(true)
   stripe_customer_id     String?   @db.VarChar
