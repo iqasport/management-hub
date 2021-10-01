@@ -6,7 +6,7 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await prisma.users.findUnique({
       where: {
         // uuid: req?.query?.uuid?.toString(),
-        email: 'referee@example.com',
+        email: 'declandr@gmail.com',
       },
     });
     res.status(200);

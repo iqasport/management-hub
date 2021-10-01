@@ -1,7 +1,6 @@
 import axios from 'modules/axios';
 import { GetServerSideProps } from 'next';
 import { users as Users } from '@prisma/client';
-import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
