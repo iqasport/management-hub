@@ -9,8 +9,7 @@ import { QueryClientProvider, QueryClient } from 'react-query';
 import GTag, { pageview } from 'modules/analytics';
 import AppErrorBoundary from 'components/errorBoundaries/app';
 import '../styles/globals.css';
-// import Layout from 'layout';
-const Layout = ({ children }) => <>{children}</>;
+import Layout from 'components/layout';
 
 const queryClient = new QueryClient();
 
@@ -35,7 +34,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           <GTag />
           <DocumentHead />
           <Fonts />
-          <Layout {...pageProps}>
+          <Layout>
             <Component {...pageProps} />
           </Layout>
         </ChakraProvider>
