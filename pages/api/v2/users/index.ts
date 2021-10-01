@@ -1,12 +1,7 @@
 import prisma from 'modules/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// TODO remove once ids are CUIDs
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
-
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function Users(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET': {
       try {

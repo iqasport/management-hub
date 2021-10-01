@@ -36,3 +36,6 @@ yarn-error.log*
 
 # db dump
 dump.sql
+
+# Sentry
+.sentryclirc

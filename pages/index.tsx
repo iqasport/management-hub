@@ -5,7 +5,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
-const Example = ({ referee }: { referee: Users }) => {
+const Example = ({ user }: { user: Users }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -16,8 +16,8 @@ const Example = ({ referee }: { referee: Users }) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js</a>,{' '}
-          {referee.first_name}!
+          Welcome to <a href="https://nextjs.org">Next.js</a>, {user.first_name}
+          !
         </h1>
 
         <p className={styles.description}>
@@ -73,11 +73,10 @@ const Example = ({ referee }: { referee: Users }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await axios('/api/v2/referees/257');
-  const { referee } = res.data;
+  const { data } = await axios('/api/v2/users/257');
 
   return {
-    props: { referee },
+    props: { user: data?.user },
   };
 };
 
