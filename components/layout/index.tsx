@@ -9,7 +9,7 @@ import {
   Text,
 } from 'components';
 import PageErrorBoundary from 'components/errorBoundaries/page';
-import { HomeIcon, UserIcon, EuroIcon, GroupIcon } from 'components/icons';
+import { HomeIcon, UserIcon, GroupIcon, MoneyIcon } from 'components/icons';
 import {
   CheckIcon,
   ExternalLinkIcon,
@@ -117,6 +117,20 @@ const Layout = ({ children }) => {
         </Box>
         <Box as="nav" mt={4}>
           <MenuList>
+            <MenuItem
+              group="support"
+              href="https://iqasport.org/rulebook"
+              target="_blank"
+            >
+              <ExternalLinkIcon /> <MenuLabel>Rulebook</MenuLabel>
+            </MenuItem>
+
+            <MenuItem group="support" href="/referees">
+              <SearchIcon /> <MenuLabel>Referees</MenuLabel>
+            </MenuItem>
+          </MenuList>
+
+          <MenuList mt={8}>
             <MenuItem group="base" href="/">
               <HomeIcon /> <MenuLabel>Dashboard</MenuLabel>
             </MenuItem>
@@ -162,7 +176,7 @@ const Layout = ({ children }) => {
             </MenuItem>
 
             <MenuItem group="ngb" href="/ngb/finances">
-              <EuroIcon /> <MenuLabel>NGB Finances</MenuLabel>
+              <MoneyIcon /> <MenuLabel>NGB Finances</MenuLabel>
             </MenuItem>
           </MenuList>
 
