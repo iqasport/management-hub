@@ -1,4 +1,4 @@
-import axios from 'modules/axios';
+import client from 'modules/genql';
 import { GetServerSideProps } from 'next';
 import { users as Users } from '@prisma/client';
 import Image from 'next/image';
@@ -61,10 +61,17 @@ const Example = ({ user }: { user: Users }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await axios('/api/v2/users/257');
+  const data = await client.query({
+    users: [
+      { uuid: '13BE5282-E9DC-4EA1-B9D8-2FCFFAC411F6' },
+      {
+        first_name: true,
+      },
+    ],
+  });
 
   return {
-    props: { user: data?.user },
+    props: { user: data?.users },
   };
 };
 
