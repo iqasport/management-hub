@@ -102,7 +102,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars;
 export interface NexusGenFieldTypes {
   Query: {
     // field return type
-    users: NexusGenRootTypes['users'] | null; // users
+    userByUuid: NexusGenRootTypes['users'] | null; // users
   };
   test_results: {
     // field return type
@@ -137,7 +137,7 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   Query: {
     // field return type name
-    users: 'users';
+    userByUuid: 'users';
   };
   test_results: {
     // field return type name
@@ -171,7 +171,7 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Query: {
-    users: {
+    userByUuid: {
       // args
       uuid: string; // String!
     };

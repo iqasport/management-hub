@@ -10,7 +10,7 @@ export type Scalars = {
 };
 
 export interface Query {
-  users?: users;
+  userByUuid?: users;
   __typename: 'Query';
 }
 
@@ -46,7 +46,7 @@ export interface users {
 }
 
 export interface QueryRequest {
-  users?: [{ uuid: Scalars['String'] }, usersRequest];
+  userByUuid?: [{ uuid: Scalars['String'] }, usersRequest];
   __typename?: boolean | number;
   __scalar?: boolean | number;
 }
@@ -106,7 +106,9 @@ export const isusers = (obj?: { __typename?: any } | null): obj is users => {
 };
 
 export interface QueryPromiseChain {
-  users: (args: { uuid: Scalars['String'] }) => usersPromiseChain & {
+  userByUuid: (args: {
+    uuid: Scalars['String'];
+  }) => usersPromiseChain & {
     get: <R extends usersRequest>(
       request: R,
       defaultValue?: FieldsSelection<users, R> | undefined
@@ -115,7 +117,9 @@ export interface QueryPromiseChain {
 }
 
 export interface QueryObservableChain {
-  users: (args: { uuid: Scalars['String'] }) => usersObservableChain & {
+  userByUuid: (args: {
+    uuid: Scalars['String'];
+  }) => usersObservableChain & {
     get: <R extends usersRequest>(
       request: R,
       defaultValue?: FieldsSelection<users, R> | undefined

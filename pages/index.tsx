@@ -62,7 +62,7 @@ const Example = ({ user }: { user: Users }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const data = await client.query({
-    users: [
+    userByUuid: [
       { uuid: '13BE5282-E9DC-4EA1-B9D8-2FCFFAC411F6' },
       {
         first_name: true,
@@ -71,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   });
 
   return {
-    props: { user: data?.users },
+    props: { user: data?.userByUuid },
   };
 };
 

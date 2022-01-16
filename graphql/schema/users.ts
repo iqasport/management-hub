@@ -18,13 +18,12 @@ export const Users = objectType({
     t.list.field('test_results', {
       type: TestResults,
       resolve: async (root, args, ctx) => {
-        const data = await ctx.db.users.findUnique({
+        const { test_results } = await ctx.db.users.findUnique({
           where: { uuid: root.uuid },
           include: { test_results: true },
         });
 
-        console.log(data.test_results);
-        return data.test_results;
+        return test_results;
       },
     });
   },
@@ -38,7 +37,7 @@ export const Users = objectType({
 
 export const Query = queryType({
   definition(t) {
-    t.field('users', {
+    t.field('userByUuid', {
       type: Users,
       args: {
         uuid: nonNull(stringArg()),

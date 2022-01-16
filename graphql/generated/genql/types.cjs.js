@@ -3,7 +3,7 @@ module.exports = {
   types: {
     DateTime: {},
     Query: {
-      users: [
+      userByUuid: [
         8,
         {
           uuid: [2, 'String!'],
