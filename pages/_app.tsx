@@ -8,7 +8,6 @@ import DocumentHead from 'document/head';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import GTag, { pageview } from 'modules/analytics';
 import AppErrorBoundary from 'components/errorBoundaries/app';
-import '../styles/globals.css';
 import Layout from 'components/layout';
 
 const queryClient = new QueryClient();

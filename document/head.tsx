@@ -45,16 +45,9 @@ export default function DocumentHead() {
       <meta property="og:image:height" content="630" />
       <meta property="twitter:card" content="summary_large_image" />
 
+      <link rel="preconnect" href="//images.prismic.io" />
       {/* Offline-Mode */}
       {/* <link rel="manifest" href="/manifest.json" /> */}
-
-      {/* Fonts */}
-      <link
-        rel="preload"
-        href="https://use.typekit.net/ltm4yyn.css"
-        as="style"
-      />
-      <link rel="stylesheet" href="https://use.typekit.net/ltm4yyn.css" />
 
       {/* Static CSS */}
       <style dangerouslySetInnerHTML={{ __html: reset }} />

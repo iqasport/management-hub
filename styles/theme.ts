@@ -1,6 +1,8 @@
 import { extendTheme } from '@chakra-ui/react';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
-
+import { SliceStyles } from 'components/slice';
+import { CardStyles } from 'components/card';
+import { HorizontalCardStyles } from 'components/horizontal-card';
 import { ButtonStyles } from 'components/button';
 
 const emBase = 16;
@@ -22,6 +24,9 @@ export default extendTheme({
   },
 
   components: {
+    Slice: SliceStyles,
+    Card: CardStyles,
+    HorizontalCard: HorizontalCardStyles,
     Button: ButtonStyles,
     Text: {
       baseStyle: {
@@ -32,8 +37,8 @@ export default extendTheme({
   },
 
   fonts: {
-    heading: 'metropolis, sans-serif',
-    body: 'proxima-nova, sans-serif',
+    heading: 'metropolis, helvetica, arial, sans-serif',
+    body: 'proxima-nova, helvetica, arial, sans-serif',
   },
 
   styles: {
@@ -41,7 +46,7 @@ export default extendTheme({
       'html, body': {
         lineHeight: 1.15,
       },
-      p: {
+      'p, li': {
         lineHeight: rem(24),
         fontSize: rem(18),
       },

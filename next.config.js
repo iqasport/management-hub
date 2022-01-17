@@ -6,6 +6,16 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const moduleExports = {
+  i18n: {
+    defaultLocale: 'en-us',
+    // TODO re-enable once website translated
+    // locales: ['en-us', 'fr-fr', 'de-de', 'es-es'],
+    locales: ['en-us'],
+  },
+  images: {
+    deviceSizes: [320, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    domains: ['images.prismic.io', 'iqasport.cdn.prismic.io'],
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

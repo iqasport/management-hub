@@ -1,6 +1,5 @@
 build/*
 public/*
 .next/*
-graphql/generated/*
 
 next.config.js
